@@ -31,13 +31,13 @@ class App {
     var currentLocation: Location
 
     init {
-        val townCentre = Location("Town Centre", "The centre of town.")
+        val townCentre = Location("Town Centre", "\nThe centre of town.")
         val scummBar = Location("Scumm Bar", "A noisy pirate bar.")
         val generalStore = Location("General Store", "A shop with odd items.")
         val jail = Location("Jail", "A small stone jail.")
         val alley = Location("Alley", "A narrow alley with stray dogs.")
         val storageYard = Location("Storage Yard", "A yard full of crates.")
-        val clockTowerBase = Location("Clock Tower Base", "The bottom of the old tower.")
+        val clockTowerBase = Location("Clock Tower Base", "Base of the old tower.")
         val topOfClockTower = Location("Top of Clock Tower", "The top of the tower.")
         val mayorsMansion = Location("Mayor's Mansion", "A large locked mansion.")
 
@@ -68,6 +68,7 @@ class MainWindow(val app: App) {
     private val titleLabel = JLabel("Meelé island explorer")
     private val infoLabel = JLabel()
 
+    private val centrebutton = JButton("To Town Centre")
     private val scummbutton = JButton("To Scumm Bar")
     private val generalbutton = JButton("To General Store")
     private val jailbutton = JButton("To Jail")
@@ -91,20 +92,43 @@ class MainWindow(val app: App) {
 
         titleLabel.setBounds(30, 30, 340, 30)
         infoLabel.setBounds(30, 90, 340, 30)
-        scummbutton.setBounds(30, 700, 170, 30)
+        centrebutton.setBounds(30, 650, 170, 30)
+        scummbutton.setBounds(30, 690, 170, 30)
+        generalbutton.setBounds(30, 730, 170, 30)
+        jailbutton.setBounds(210, 650, 170, 30)
+        aleybutton.setBounds(210, 690, 170, 30)
+        storagebutton.setBounds(210, 730, 170, 30)
+        botOfClockbutton.setBounds(390, 650, 170, 30)
+        topOfClockbutton.setBounds(390, 690, 170, 30)
+        mayorbutton.setBounds(390, 730, 170, 30)
 
 
         panel.add(titleLabel)
         panel.add(infoLabel)
+        panel.add(centrebutton)
         panel.add(scummbutton)
+        panel.add(generalbutton)
+        panel.add(jailbutton)
+        panel.add(aleybutton)
+        panel.add(storagebutton)
+        panel.add(botOfClockbutton)
+        panel.add(topOfClockbutton)
+        panel.add(mayorbutton)
 
     }
 
     private fun setupStyles() {
         titleLabel.font = Font(Font.SANS_SERIF, Font.BOLD, 18)
         infoLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 14)
+        centrebutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
         scummbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
-
+        generalbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
+        jailbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
+        aleybutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
+        storagebutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
+        botOfClockbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
+        topOfClockbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
+        mayorbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
     }
 
     private fun setupWindow() {
@@ -123,13 +147,38 @@ class MainWindow(val app: App) {
     fun updateUI() {
         infoLabel.text = "You are at ${app.currentLocation.name}, ${app.currentLocation.description}" // was going
 
+        centrebutton.addActionListener {
+            goLocation(app.locations[0])
+        }
         scummbutton.addActionListener {
-            goLocation()
+            goLocation(app.locations[1])
+        }
+        generalbutton.addActionListener {
+            goLocation(app.locations[2])
+        }
+        jailbutton.addActionListener {
+            goLocation(app.locations[3])
+        }
+        aleybutton.addActionListener {
+            goLocation(app.locations[4])
+        }
+        storagebutton.addActionListener {
+            goLocation(app.locations[5])
+        }
+        botOfClockbutton.addActionListener {
+            goLocation(app.locations[6])
+        }
+        topOfClockbutton.addActionListener {
+            goLocation(app.locations[7])
+        }
+        mayorbutton.addActionListener {
+            goLocation(app.locations[8])
         }
     }
 
-    private fun goLocation() {
-
+    private fun goLocation(destination: Location) {
+        app.currentLocation = destination
+        updateUI()
     }
 
     fun show() {
