@@ -77,7 +77,6 @@ class MainWindow(val app: App) {
     private val topOfClockbutton = JButton("To Top of Clock Tower")
     private val mayorbutton = JButton("To Mayor's Mansion")
 
-
     init {
         setupLayout()
         setupStyles()
@@ -124,12 +123,13 @@ class MainWindow(val app: App) {
         infoLabel.text = "You are at ${app.currentLocation.name}, ${app.currentLocation.description}" // was going
 
         scummbutton.addActionListener {
-            goLocation()
+            goLocation(app.locations[1])
         }
     }
 
-    private fun goLocation() {
-
+    private fun goLocation(destination: Location) {
+        app.currentLocation = destination
+        updateUI()
     }
 
     fun show() {
