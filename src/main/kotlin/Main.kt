@@ -1,5 +1,4 @@
 import com.formdev.flatlaf.themes.FlatMacDarkLaf
-import java.awt.Color
 import java.awt.Font
 import javax.swing.*
 
@@ -26,6 +25,7 @@ class Location(
     val name: String,
     val description: String
 )
+
 class App {
     val locations = mutableListOf<Location>()
     var currentLocation: Location
@@ -56,8 +56,6 @@ class App {
 }
 
 
-
-
 /**
  * Main UI window, handles user clicks, etc.
  *
@@ -68,8 +66,17 @@ class MainWindow(val app: App) {
     private val panel = JPanel().apply { layout = null }
 
     private val titleLabel = JLabel("Meelé island explorer")
-
     private val infoLabel = JLabel()
+
+    private val scummbutton = JButton("To Scumm Bar")
+    private val generalbutton = JButton("To General Store")
+    private val jailbutton = JButton("To Jail")
+    private val aleybutton = JButton("To Alley")
+    private val storagebutton = JButton("To Storage Yard")
+    private val botOfClockbutton = JButton("To Clock Tower")
+    private val topOfClockbutton = JButton("To Top of Clock Tower")
+    private val mayorbutton = JButton("To Mayor's Mansion")
+
 
     init {
         setupLayout()
@@ -80,19 +87,23 @@ class MainWindow(val app: App) {
     }
 
     private fun setupLayout() {
-        panel.preferredSize = java.awt.Dimension(400, 220)
+        panel.preferredSize = java.awt.Dimension(1400, 800)
 
         titleLabel.setBounds(30, 30, 340, 30)
         infoLabel.setBounds(30, 90, 340, 30)
+        scummbutton.setBounds(30, 700, 170, 30)
+
 
         panel.add(titleLabel)
         panel.add(infoLabel)
+        panel.add(scummbutton)
 
     }
 
     private fun setupStyles() {
-        titleLabel.font = Font(Font.SANS_SERIF, Font.BOLD, 32)
-        infoLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 20)
+        titleLabel.font = Font(Font.SANS_SERIF, Font.BOLD, 18)
+        infoLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 14)
+        scummbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
 
     }
 
@@ -110,6 +121,14 @@ class MainWindow(val app: App) {
 
 
     fun updateUI() {
+        infoLabel.text = "You are at ${app.currentLocation.name}, ${app.currentLocation.description}" // was going
+
+        scummbutton.addActionListener {
+            goLocation()
+        }
+    }
+
+    private fun goLocation() {
 
     }
 
