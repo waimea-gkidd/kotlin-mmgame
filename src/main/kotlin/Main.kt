@@ -31,7 +31,7 @@ class App {
     var currentLocation: Location
 
     init {
-        val townCentre = Location("Town Centre", "\nThe centre of town.")
+        val townCentre = Location("Town Centre",  "The centre of town.")
         val scummBar = Location("Scumm Bar", "A noisy pirate bar.")
         val generalStore = Location("General Store", "A shop with odd items.")
         val jail = Location("Jail", "A small stone jail.")
@@ -39,7 +39,7 @@ class App {
         val storageYard = Location("Storage Yard", "A yard full of crates.")
         val clockTowerBase = Location("Clock Tower Base", "Base of the old tower.")
         val topOfClockTower = Location("Top of Clock Tower", "The top of the tower.")
-        val mayorsMansion = Location("Mayor's Mansion", "A large locked mansion.")
+        val mayorsMansion = Location("Mayor's Mansion", "A locked mansion.")
 
         locations.add(townCentre)
         locations.add(scummBar)
