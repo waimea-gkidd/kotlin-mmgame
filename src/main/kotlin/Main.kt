@@ -31,7 +31,7 @@ class App {
     var currentLocation: Location
 
     init {
-        val townCentre = Location("Town Centre",  "The centre of town.")
+        val townCentre = Location("Town Centre", "The centre of town.")
         val scummBar = Location("Scumm Bar", "A noisy pirate bar.")
         val generalStore = Location("General Store", "A shop with odd items.")
         val jail = Location("Jail", "A small stone jail.")
@@ -140,14 +140,7 @@ class MainWindow(val app: App) {
     }
 
     private fun setupActions() {
-
-    }
-
-
-    fun updateUI() {
-        infoLabel.text = "You are at ${app.currentLocation.name}, ${app.currentLocation.description}" // was going
-
-        centrebutton.addActionListener {
+        centrebutton.addActionListener { // locations[x] from kotlin for beginners array / kinda just auto did it
             goLocation(app.locations[0])
         }
         scummbutton.addActionListener {
@@ -174,6 +167,11 @@ class MainWindow(val app: App) {
         mayorbutton.addActionListener {
             goLocation(app.locations[8])
         }
+    }
+
+
+    fun updateUI() {
+        infoLabel.text = "You are at ${app.currentLocation.name}, ${app.currentLocation.description}" // was going
     }
 
     private fun goLocation(destination: Location) {
