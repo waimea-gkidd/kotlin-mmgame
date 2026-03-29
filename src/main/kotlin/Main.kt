@@ -24,7 +24,10 @@ fun main() {
 class Location(
     val name: String,
     val description: String
-)
+
+) {
+    val connectLocation = mutableListOf<Location>()
+}
 
 class App {
     val locations = mutableListOf<Location>()
@@ -50,6 +53,34 @@ class App {
         locations.add(clockTowerBase)
         locations.add(topOfClockTower)
         locations.add(mayorsMansion)
+
+
+        // Ignore the indentation below, they are simply for a better structure.
+        // Also note that the locations themselves were derrived from chatGPT (I ain't writing all'at) the code was myself from preexisting samples.
+        townCentre.connectLocation.add(scummBar)
+        townCentre.connectLocation.add(generalStore)
+        townCentre.connectLocation.add(jail)
+        townCentre.connectLocation.add(alley)
+        townCentre.connectLocation.add(clockTowerBase)
+        townCentre.connectLocation.add(mayorsMansion)
+
+        scummBar.connectLocation.add(townCentre)
+
+        generalStore.connectLocation.add(townCentre)
+
+        jail.connectLocation.add(townCentre)
+
+        alley.connectLocation.add(storageYard)
+        alley.connectLocation.add(townCentre)
+
+        storageYard.connectLocation.add(alley)
+
+        clockTowerBase.connectLocation.add(townCentre)
+        clockTowerBase.connectLocation.add(topOfClockTower)
+
+        topOfClockTower.connectLocation.add(clockTowerBase)
+
+        mayorsMansion.connectLocation.add(townCentre)
 
         currentLocation = townCentre
     }
@@ -172,6 +203,18 @@ class MainWindow(val app: App) {
 
     fun updateUI() {
         infoLabel.text = "You are at ${app.currentLocation.name}, ${app.currentLocation.description}" // was going
+
+        show()
+        val location = app.currentLocation
+        if (
+            location.connectLocation.contains(app.locations[0]) // read the descriptions of the functions (I think the .x's are called) to find that contains was the right thing.
+        ) {
+            centrebutton.isVisible = true  // go back to town centre. Note: doesnt work at town
+        }
+        if (
+            location.connectLocation.contains(app.locations[1])
+        )
+            scummbutton.isVisible = true // well umm shit. Doesnt work.
     }
 
     private fun goLocation(destination: Location) {
@@ -181,6 +224,17 @@ class MainWindow(val app: App) {
 
     fun show() {
         frame.isVisible = true
+        centrebutton.isVisible = false
+        //scummbutton.isVisible = false
+        generalbutton.isVisible = false
+        jailbutton.isVisible = false
+        aleybutton.isVisible = false
+        storagebutton.isVisible = false
+        botOfClockbutton.isVisible = false
+        topOfClockbutton.isVisible = false
+        mayorbutton.isVisible =
+            false  // only want to display the current location links to the options of buttons. Therefore, they are NOT visible by default.
+        // Next step is to set the show fun into updateUI
     }
 }
 
