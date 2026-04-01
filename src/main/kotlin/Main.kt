@@ -171,7 +171,7 @@ class MainWindow(val app: App) {
     }
 
     private fun setupActions() {
-        centrebutton.addActionListener { // locations[x] from kotlin for beginners array / kinda just auto did it
+        centrebutton.addActionListener { // locations[x] from kotlin for beginners array
             goLocation(app.locations[0])
         }
         scummbutton.addActionListener {
@@ -204,28 +204,8 @@ class MainWindow(val app: App) {
     fun updateUI() {
         infoLabel.text = "You are at ${app.currentLocation.name}, ${app.currentLocation.description}" // was going
 
-        show()
-        val location = app.currentLocation
-        if (
-            location.connectLocation.contains(app.locations[0]) // read the descriptions of the functions (I think the .x's are called) to find that contains was the right thing.
-        ) {
-            centrebutton.isVisible = true  // go back to town centre. Note: doesnt work at town
-        }
-        if (
-            location.connectLocation.contains(app.locations[1])
-        )
-            scummbutton.isVisible = true // well umm shit. Doesnt work.
-    }
-
-    private fun goLocation(destination: Location) {
-        app.currentLocation = destination
-        updateUI()
-    }
-
-    fun show() {
-        frame.isVisible = true
         centrebutton.isVisible = false
-        //scummbutton.isVisible = false
+        scummbutton.isVisible = false
         generalbutton.isVisible = false
         jailbutton.isVisible = false
         aleybutton.isVisible = false
@@ -235,7 +215,79 @@ class MainWindow(val app: App) {
         mayorbutton.isVisible =
             false  // only want to display the current location links to the options of buttons. Therefore, they are NOT visible by default.
         // Next step is to set the show fun into updateUI
+
+        val location = app.currentLocation
+
+        if (
+            location.connectLocation.contains(app.locations[0]) // read the descriptions of the functions (I think the .x's are called) to find that contains was the right thing.
+        ) {
+            centrebutton.isVisible = true  // go back to town centre. Note: doesnt work at town
+        }
+
+        if (
+            location.connectLocation.contains(app.locations[1])
+        ) {
+            scummbutton.isVisible = true
+        }
+
+        if (
+            location.connectLocation.contains(app.locations[2])
+        ) {
+            generalbutton.isVisible = true
+        }
+
+        if (
+            location.connectLocation.contains(app.locations[3])
+        ) {
+            jailbutton.isVisible = true
+        }
+
+        if (
+            location.connectLocation.contains(app.locations[4])
+        ) {
+            aleybutton.isVisible = true
+        }
+
+        if (
+            location.connectLocation.contains(app.locations[5])
+        ) {
+            storagebutton.isVisible = true
+        }
+
+        if (
+            location.connectLocation.contains(app.locations[6])
+        ) {
+            botOfClockbutton.isVisible = true
+        }
+
+        if (
+            location.connectLocation.contains(app.locations[7])
+        ) {
+            topOfClockbutton.isVisible = true
+        }
+
+        if (
+            location.connectLocation.contains(app.locations[8])
+        ) {
+            mayorbutton.isVisible = true
+        }
+
     }
+
+    private fun goLocation(destination: Location) {
+        app.currentLocation = destination
+        updateUI()
+    }
+
+    fun show() {
+        frame.isVisible = true
+
+    }
+
+}
+
+fun stuffToDo() {
+    
 }
 
 
