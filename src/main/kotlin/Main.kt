@@ -21,6 +21,8 @@ fun main() {
  * @property name the user's name
  * @property score the points earned
  */
+
+
 class Location(
     val name: String,
     val description: String
@@ -33,16 +35,28 @@ class App {
     val locations = mutableListOf<Location>()
     var currentLocation: Location
 
+    val townCentre = Location("Town Centre", "The centre of town.")
+    val scummBar = Location("Scumm Bar", "A noisy pirate bar.")
+    val generalStore = Location("General Store", "A shop with odd items.")
+    val jail = Location("Jail", "A small stone jail.")
+    val alley = Location("Alley", "A narrow alley with stray dogs.")
+    val storageYard = Location("Storage Yard", "A yard full of crates.")
+    val clockTowerBase = Location("Clock Tower Base", "Base of the old tower.")
+    val topOfClockTower = Location("Top of Clock Tower", "The top of the tower.")
+    val mayorsMansion = Location("Mayor's Mansion", "A locked mansion.")
+    // having the val's/var's outside of init makes them accesable in other functions.
+
+    var item = "Empty"
+    var fixClock = false
+    var talkGuybrush = false
+    var talkGuard = false
+    var storageOpen = false
+    var signal = false
+    var grog = false
+    var key = false
+
     init {
-        val townCentre = Location("Town Centre", "The centre of town.")
-        val scummBar = Location("Scumm Bar", "A noisy pirate bar.")
-        val generalStore = Location("General Store", "A shop with odd items.")
-        val jail = Location("Jail", "A small stone jail.")
-        val alley = Location("Alley", "A narrow alley with stray dogs.")
-        val storageYard = Location("Storage Yard", "A yard full of crates.")
-        val clockTowerBase = Location("Clock Tower Base", "Base of the old tower.")
-        val topOfClockTower = Location("Top of Clock Tower", "The top of the tower.")
-        val mayorsMansion = Location("Mayor's Mansion", "A locked mansion.")
+
 
         locations.add(townCentre)
         locations.add(scummBar)
@@ -98,6 +112,8 @@ class MainWindow(val app: App) {
 
     private val titleLabel = JLabel("Meelé island explorer")
     private val infoLabel = JLabel()
+    private val notifLabel = JLabel()
+    private val dialogLabel = JLabel()
 
     private val centrebutton = JButton("To Town Centre")
     private val scummbutton = JButton("To Scumm Bar")
@@ -115,7 +131,71 @@ class MainWindow(val app: App) {
         setupStyles()
         setupActions()
         setupWindow()
+        stuffToDo(app)
         updateUI()
+    }
+
+    private fun stuffToDo(app: App) {
+
+        val name = app.currentLocation.name
+
+        if (name == "Scumm Bar" && app.item == "Empty") {
+            println("You ask around for some small job to earn money")
+            println("The chef offers you $5 to clear tables")
+            app.item = "5 Coins"
+            notifLabel.text = "You cleaned tables and got 5 coins!"
+        }
+        if (name == "General Store" && app.item == "5 Coins") {
+            app.item = "Rusty Cog"
+            notifLabel.text = "You got Rusty Cog!"
+        }
+        if (name == "Top of Clock Tower" && app.item == "Rusty Cog") {
+            app.item = "Nothing"
+            app.fixClock = true
+            notifLabel.text = "You fixed the broken clock tower"
+        }
+        if (name == "Jail" && app.item == "Nothing") {
+            app.item = "Nothing"
+            println("Walking past the jail you hear someone call out.")
+            println("It's Stan (of course it is).")
+            println("You asked the jailer if he would let Stan out")
+            println("You can have the key if you bring me grog, says the guard.")
+            app.talkGuard = true
+            notifLabel.text = "Bring the guard some grog"
+        }
+        if (name == "Scumm Bar" && app.talkGuard == true) {
+            println("You approach the chef and ask how much grog is")
+            println("Grog is $5. But for you, me lad, I'll give you this special one for free")
+            app.item = "Grog"
+            app.grog = true
+            notifLabel.text = "You gained ominous grog"
+        }
+        if (name == "Jail" && app.item == "Grog") {
+            println("You make the trade with the guard")
+            println("The grog is gone in seconds, and... ")
+            print("the guard fell asleep??")
+            println("Whether this was the ominous power of the grog, we'll never know.")
+            app.item = "Key"
+            app.key = true
+            notifLabel.text = "You gained a key"
+        }
+        if (name == "Jail" && app.item == "Key") {
+            println("The key doesnt work. Instead, Stan walks out on his own.")
+            println("Hmm, Stan mutters.")
+            println("Guess he never locked it.")
+            println("That key there must've been for something else.")
+            app.item = "Key"
+            notifLabel.text = "Maybe something is locked"
+        }
+        if (name == "Storage Yard" && app.item == "Key") {
+            println("The gate to the storage yard is locked")
+            println("You try it with your key. And...")
+            println("The storage yard is unlocked")
+            println("A banana is conveniently placed on a stool")
+            app.item = "Banana"
+            app.storageOpen = true
+            notifLabel.text = "You open the storage yard... and gained a banana!"
+        }
     }
 
     private fun setupLayout() {
@@ -123,6 +203,8 @@ class MainWindow(val app: App) {
 
         titleLabel.setBounds(30, 30, 340, 30)
         infoLabel.setBounds(30, 90, 340, 30)
+        notifLabel.setBounds(30, 90, 1300, 700)
+        dialogLabel.setBounds(30, 180, 1200, 700)
         centrebutton.setBounds(30, 650, 170, 30)
         scummbutton.setBounds(30, 690, 170, 30)
         generalbutton.setBounds(30, 730, 170, 30)
@@ -136,6 +218,7 @@ class MainWindow(val app: App) {
 
         panel.add(titleLabel)
         panel.add(infoLabel)
+        panel.add(notifLabel)
         panel.add(centrebutton)
         panel.add(scummbutton)
         panel.add(generalbutton)
@@ -151,6 +234,7 @@ class MainWindow(val app: App) {
     private fun setupStyles() {
         titleLabel.font = Font(Font.SANS_SERIF, Font.BOLD, 18)
         infoLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 14)
+        notifLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 30)
         centrebutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
         scummbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
         generalbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
@@ -266,8 +350,7 @@ class MainWindow(val app: App) {
             topOfClockbutton.isVisible = true
         }
 
-        if (
-            location.connectLocation.contains(app.locations[8])
+        if (location.connectLocation.contains(app.locations[8])
         ) {
             mayorbutton.isVisible = true
         }
@@ -276,6 +359,7 @@ class MainWindow(val app: App) {
 
     private fun goLocation(destination: Location) {
         app.currentLocation = destination
+        stuffToDo(app)
         updateUI()
     }
 
@@ -284,10 +368,6 @@ class MainWindow(val app: App) {
 
     }
 
-}
-
-fun stuffToDo() {
-    
 }
 
 
