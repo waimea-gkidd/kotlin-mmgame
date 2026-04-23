@@ -55,6 +55,8 @@ class App {
     var grog = false
     var key = false
 
+    var action = "Doing zilch"
+
     init {
 
 
@@ -115,6 +117,9 @@ class MainWindow(val app: App) {
     private val notifLabel = JLabel()
     private val dialogLabel = JLabel()
 
+    private var actionJButton1 = JButton("Doing zilch")
+    private var actionJButton2 = JButton("Doing zilch")
+
     private val centrebutton = JButton("To Town Centre")
     private val scummbutton = JButton("To Scumm Bar")
     private val generalbutton = JButton("To General Store")
@@ -139,12 +144,59 @@ class MainWindow(val app: App) {
 
         val name = app.currentLocation.name
 
-        if (name == "Scumm Bar" && app.item == "Empty") {
-            println("You ask around for some small job to earn money")
-            println("The chef offers you $5 to clear tables")
-            app.item = "5 Coins"
-            notifLabel.text = "You cleaned tables and got 5 coins!"
+
+        // route one
+
+        if (name == "Scumm Bar") {
+            if (actionJButton1.text == "Doing zilch") {         // name == "X" && is an extra error checking addition. It isnt nesassary for half of this code, but it is useful for clarity of what I need selected
+                dialogLabel.text = "<html>Cook: 'Arg! There's a giant, red-eyed rat in the pantry!\n" +
+                        "You there!\n" +
+                        "Chase it out of here and I'll give ye 5 coins for the trouble!<html>"
+                actionJButton1.text = "Continue"
+                return
+            }
+            if (actionJButton1.text == "Continue" && app.item == "Empty") {
+                dialogLabel.isVisible = false
+                notifLabel.text = "You got a job. Will you take it?"
+                actionJButton1.text = "Take job"
+                app.item = "Nearly 5 coins"
+                return
+            }
+            if (actionJButton1.text == "Take job" && app.item == "Nearly 5 coins") {
+                notifLabel.text = "You scared away the rat"
+                actionJButton1.text = "Continue"
+                return
+            }
+            if (actionJButton1.text == "Continue" && app.item == "Nearly 5 coins") {
+                dialogLabel.text = "<html>Cook: Thank you me lad, ere's your money.<html>"
+                dialogLabel.isVisible = true
+                notifLabel.isVisible = false
+                actionJButton1.text = "Continue"
+                app.item = "5 coins"
+                return
+            }
+            if (actionJButton1.text == "Continue" && app.item == "5 coins") {
+                actionJButton1.text = "Done"
+                dialogLabel.isVisible = false
+                notifLabel.isVisible = true
+                notifLabel.text = "You now have $5. But... Where can you spend it?"
+                app.item = "5 coins"
+                return
+            }
+            if (app.item == "5 coins" && actionJButton1.text == "Done") {
+                actionJButton1.isVisible = false
+                notifLabel.isVisible = false
+                return
+            }
         }
+
+
+
+
+
+
+
+
         if (name == "General Store" && app.item == "5 Coins") {
             app.item = "Rusty Cog"
             notifLabel.text = "You got Rusty Cog!"
@@ -154,6 +206,8 @@ class MainWindow(val app: App) {
             app.fixClock = true
             notifLabel.text = "You fixed the broken clock tower"
         }
+
+        // route two
         if (name == "Jail" && app.item == "Nothing") {
             app.item = "Nothing"
             println("Walking past the jail you hear someone call out.")
@@ -203,8 +257,10 @@ class MainWindow(val app: App) {
 
         titleLabel.setBounds(30, 30, 340, 30)
         infoLabel.setBounds(30, 90, 340, 30)
-        notifLabel.setBounds(30, 90, 1300, 700)
-        dialogLabel.setBounds(30, 180, 1200, 700)
+        notifLabel.setBounds(380, 450, 650, 200)
+        dialogLabel.setBounds(380, 130, 1300, 50)
+        actionJButton1.setBounds(600, 650, 170, 30)
+
         centrebutton.setBounds(30, 650, 170, 30)
         scummbutton.setBounds(30, 690, 170, 30)
         generalbutton.setBounds(30, 730, 170, 30)
@@ -219,6 +275,9 @@ class MainWindow(val app: App) {
         panel.add(titleLabel)
         panel.add(infoLabel)
         panel.add(notifLabel)
+        panel.add(dialogLabel)
+        panel.add(actionJButton1)
+
         panel.add(centrebutton)
         panel.add(scummbutton)
         panel.add(generalbutton)
@@ -234,7 +293,9 @@ class MainWindow(val app: App) {
     private fun setupStyles() {
         titleLabel.font = Font(Font.SANS_SERIF, Font.BOLD, 18)
         infoLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 14)
-        notifLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 30)
+        notifLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 20)
+        dialogLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 16)
+        actionJButton1.font = Font(Font.SANS_SERIF, Font.BOLD, 12)
         centrebutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
         scummbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
         generalbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
@@ -282,6 +343,13 @@ class MainWindow(val app: App) {
         mayorbutton.addActionListener {
             goLocation(app.locations[8])
         }
+
+        actionJButton1.addActionListener {
+            stuffToDo(app)
+            updateUI()
+        }
+
+
     }
 
 
