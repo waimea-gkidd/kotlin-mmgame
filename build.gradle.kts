@@ -18,6 +18,7 @@ application {
 dependencies {
     implementation("com.formdev:flatlaf:3.6.2")
     implementation("com.formdev:flatlaf-intellij-themes:3.6.2")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 
