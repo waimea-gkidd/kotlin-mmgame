@@ -1,0 +1,259 @@
+//        if (app.contact == false) {
+//
+//            notifLabel.text = "You wake up with no recollection of the night before.\n" +
+//
+//                    "On the front it reads...\n" +
+//
+//                    "Dear entrusted one\n" +
+//
+//                    "-G.T."
+//
+//            actionJButton1.text = "Read note"
+//
+//            actionJButton2.text = "Leave the note"
+//
+//
+//
+//            return
+//
+//        }
+//
+//        if (name == "Town Centre" && actionJButton1.text == "Read note") {
+//
+//            dialogLabel.text = "Hello there, it is I, the mighty pirate... Guybrush Threepwood" +
+//
+//                    "Yes yes, I know, I know...\n" +
+//
+//                    "Please calm yourself and listen to the quest placed on to you"
+//
+//            actionJButton1.text = "Continue reading"
+//
+//            app.contact = true
+//
+//            return
+//
+//        }
+//
+//        else if (name == "Town centre" && app.contact == true) {
+//
+//            notifLabel.text = "Here's the breakdown...."
+//
+//            actionJButton1.text = "Doing zilch"
+//
+//            return
+//
+//        }
+//
+//
+//
+//
+//
+//// route one
+//
+//
+//
+//        if (name == "Scumm Bar") {
+//
+//            if (actionJButton1.text == "Doing zilch") { // name == "X" && is an extra error checking addition. It isnt nesassary for half of this code, but it is useful for clarity of what I need selected
+//
+//                dialogLabel.text = "<html>Cook: Arg! There's a giant, red-eyed rat in the pantry!\n" +
+//
+//                        "You there!\n" +
+//
+//                        "Chase it out of here and I'll give ye 5 coins for the trouble!<html>"
+//
+//                actionJButton1.text = "Continue"
+//
+//                return
+//
+//            }
+//
+//            if (actionJButton1.text == "Continue" && app.item == "Empty") {
+//
+//                dialogLabel.isVisible = false
+//
+//                notifLabel.text = "You got a job. Will you take it?"
+//
+//                actionJButton1.text = "Take job"
+//
+//                app.item = "Nearly 5 coins"
+//
+//                return
+//
+//            }
+//
+//            if (actionJButton1.text == "Take job" && app.item == "Nearly 5 coins") {
+//
+//                notifLabel.text = "You scared away the rat"
+//
+//                actionJButton1.text = "Continue"
+//
+//                return
+//
+//            }
+//
+//            if (actionJButton1.text == "Continue" && app.item == "Nearly 5 coins") {
+//
+//                dialogLabel.text = "<html>Cook: Thank you me lad, ere's your money.<html>"
+//
+//                dialogLabel.isVisible = true
+//
+//                notifLabel.isVisible = false
+//
+//                actionJButton1.text = "Continue"
+//
+//                app.item = "5 coins"
+//
+//                return
+//
+//            }
+//
+//            if (actionJButton1.text == "Continue" && app.item == "5 coins") {
+//
+//                actionJButton1.text = "Done"
+//
+//                dialogLabel.isVisible = false
+//
+//                notifLabel.isVisible = true
+//
+//                notifLabel.text = "You now have $5. But... Where can you spend it?"
+//
+//                app.item = "5 coins"
+//
+//                return
+//
+//            }
+//
+//            if (app.item == "5 coins" && actionJButton1.text == "Done") {
+//
+//                actionJButton1.isVisible = false
+//
+//                notifLabel.isVisible = false
+//
+//                return
+//
+//            }
+//
+//        }
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//        if (name == "General Store" && app.item == "5 Coins") {
+//
+//            app.item = "Rusty Cog"
+//
+//            notifLabel.text = "You got Rusty Cog!"
+//
+//        }
+//
+//        if (name == "Top of Clock Tower" && app.item == "Rusty Cog") {
+//
+//            app.item = "Nothing"
+//
+//            app.fixClock = true
+//
+//            notifLabel.text = "You fixed the broken clock tower"
+//
+//        }
+//
+//
+//
+//// route two
+//
+//        if (name == "Jail" && app.item == "Nothing") {
+//
+//            app.item = "Nothing"
+//
+//            println("Walking past the jail you hear someone call out.")
+//
+//            println("It's Stan (of course it is).")
+//
+//            println("You asked the jailer if he would let Stan out")
+//
+//            println("You can have the key if you bring me grog, says the guard.")
+//
+//            app.talkGuard = true
+//
+//            notifLabel.text = "Bring the guard some grog"
+//
+//        }
+//
+//        if (name == "Scumm Bar" && app.talkGuard == true) {
+//
+//            println("You approach the chef and ask how much grog is")
+//
+//            println("Grog is $5. But for you, me lad, I'll give you this special one for free")
+//
+//            app.item = "Grog"
+//
+//            app.grog = true
+//
+//            notifLabel.text = "You gained ominous grog"
+//
+//        }
+//
+//        if (name == "Jail" && app.item == "Grog") {
+//
+//            println("You make the trade with the guard")
+//
+//            println("The grog is gone in seconds, and... ")
+//
+//            print("the guard fell asleep??")
+//
+//            println("Whether this was the ominous power of the grog, we'll never know.")
+//
+//            app.item = "Key"
+//
+//            app.key = true
+//
+//            notifLabel.text = "You gained a key"
+//
+//        }
+//
+//        if (name == "Jail" && app.item == "Key") {
+//
+//            println("The key doesnt work. Instead, Stan walks out on his own.")
+//
+//            println("Hmm, Stan mutters.")
+//
+//            println("Guess he never locked it.")
+//
+//            println("That key there must've been for something else.")
+//
+//            app.item = "Key"
+//
+//            notifLabel.text = "Maybe something is locked"
+//
+//        }
+//
+//        if (name == "Storage Yard" && app.item == "Key") {
+//
+//            println("The gate to the storage yard is locked")
+//
+//            println("You try it with your key. And...")
+//
+//            println("The storage yard is unlocked")
+//
+//            println("A banana is conveniently placed on a stool")
+//
+//            app.item = "Banana"
+//
+//            app.storageOpen = true
+//
+//            notifLabel.text = "You open the storage yard... and gained a banana!"
+//
+//        }
