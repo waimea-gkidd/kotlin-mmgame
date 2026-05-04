@@ -24,27 +24,41 @@ fun main() {
  * @property score the points earned
  */
 
-
 class Location(
     val name: String,
     val description: String,
-
-    var isQuest: Boolean = false,
-
-    val notes: List<String> = listOf(),
-    var currentNote: Int = 0,
-
-    val rewardItem: String? = null,
+    val noQuestNotes: String,
+    val questNotes: List<String> = listOf(),
+    val actionText: List<String> = listOf(),
+    val rewardItem: String? = null, // changed to a list so that multiple
     val requiredItem: String? = null
-
 ) {
+    var currentQuestNote: Int = 0
     val connectLocation = mutableListOf<Location>()
+    var questCompleted = false
+
+    fun reset() {
+        currentQuestNote = 0
+    }
+
+    fun questCompleted(): Boolean {
+        // Last note?
+        return currentQuestNote == questNotes.size - 1
+    }
+
+    fun nextNote() {
+        if (currentQuestNote < questNotes.size - 1) {
+            currentQuestNote++
+        }
+    }
 }
 
 
 class App {
     val locations = mutableListOf<Location>()
     var currentLocation: Location
+
+    //    var currentQuest: Location
     var itemInHand: String? = null
     var contact = false
 
@@ -54,38 +68,112 @@ class App {
     val jail: Location
     val alley: Location
     val storageYard: Location
-    val clockTowerBase: Location
-    val topOfClockTower: Location
+    val botOfClock: Location
+    val topOfClock: Location
     val mayorsMansion: Location
 
     init {
 
+        val converation = "You have spoken to Guybrush"
+        val coins = "5 coins"
+
+        // Initial meeting/note from Guybrush
         townCentre = Location(
-            name = "Town Centre",
-            description = "The centre of town.",
-            isQuest = true,
-            notes = listOf(
-                "<html>You wake up with no memory of last night.\n A note on the floor reads: Dear entrusted one\n -G.T.\n</html>",
-                "<html>Guybrush: It is I, the mighty pirate Guybrush Threepwood!\n Calm yourself and listen closely to the quest I have for you.\n</html>",
-                "<html>Guybrush: I'm stuck in the Mansion. Fix the clock tower and bring me a snack so Elaine lets me out!\n Oh! and bring Stan if you too please.</html>"
-            )
+            "Town Centre",
+            "The centre of town.",
+            "The Town centre is empty",
+            listOf(
+                "<html>You wake up with no memory of last night.<br>A note on the floor reads: Dear entrusted one -G.T.</html>", // Dialog
+                "<html>Guybrush: It is I, the mighty pirate Guybrush Threepwood!<br>Calm yourself and listen closely to the quest I have for you.</html>", // Dialog
+                "<html>Guybrush: I'm stuck in the Mansion. Fix the clock tower and bring me a snack, I'm starving!! And I nearly forgot... bring Stan so he can convince Elaine to let me out!</html>" // Dialog
+            ),
+            listOf("Read Note", "Next", "Done"),
+            converation
         )
 
-        scummBar = Location("Scumm Bar", "A noisy pirate bar.")
+        // Route 1
+        scummBar = Location(
+            "Scumm Bar",
+            "A noisy pirate bar.",
+            "Hello, sailor! Come back later",
+            listOf(
+                "<html>Cook: Arg! There's a giant, red-eyed rat in the pantry!\nYou there!\nChase it out of here and I'll give ye 5 coins for the trouble!<html>", // Dialog
+                "<html>Cook: Thank you me lad, ere's your money.<html>", // Dialog
+                "You now have $5. But... Where can you spend it?", // Notif label
+                "You approach the chef and ask how much grog is\nGrog is $5. But for you, me lad, I'll give you this special one for free" // Dialog
+            ),
+            listOf("Read Note", "Next", "Done"),
+            coins,
+            converation
+        )
 
-        generalStore = Location("General Store", "A shop with odd items.")
+        generalStore = Location(
+            "General Store",
+            "A shop with odd items.",
+            "",
+            listOf(
+                "You got Rusty Cog!" // Notif
+            ),
+            listOf("Read Note", "Next", "Done"),
+            "Rusty Cog",
+            "5 coins"
+        )
 
-        jail = Location("Jail", "A small stone jail.")
+        botOfClock = Location("Clock Tower Base", "Base of the old tower.", "")
 
-        alley = Location("Alley", "A narrow alley with stray dogs.")
+        topOfClock = Location(
+            "Top of Clock Tower",
+            "The top of the tower.",
+            "",
+            listOf(
+                "You fixed the broken clock tower"
+            ),
+            listOf("Read Note", "Next", "Done"),
+            "Rusty Cog"
+        )
 
-        storageYard = Location("Storage Yard", "A yard full of crates.")
+        // Route 2 (will fix the schema here a little later on)
+        jail = Location(
+            "Jail",
+            "A small stone jail.",
+            "",
+            listOf(
+                "Walking past the jail you hear someone call out.\nIt's Stan (of course it is).\nYou asked the jailer if he would let Stan out\nYou can have the key if you bring me grog, says the guard.",
+                "You make the trade with the guard\nThe grog is gone in seconds, and... \nthe guard fell asleep??\nWhether this was the ominous power of the grog, we'll never know.",
+                "The key doesnt work. Instead, Stan walks out on his own.\nHmm, Stan mutters.\nGuess he never locked it.\nThat key there must've been for something else."
+            ),
+            listOf("Read Note", "Next", "Done"),
+            "Key",
+            "Grog"
+        )
 
-        clockTowerBase = Location("Clock Tower Base", "Base of the old tower.")
+        alley = Location(
+            "Alley",
+            "A narrow alley with stray dogs.",
+            "",
+            listOf(
 
-        topOfClockTower = Location("Top of Clock Tower", "The top of the tower.")
+            ),
+            listOf("Read Note", "Next", "Done"),
+            "Grog",
+        )
 
-        mayorsMansion = Location("Mayor's Mansion", "A locked mansion.")
+        storageYard = Location(
+            "Storage Yard",
+            "A yard full of crates.",
+            "",
+            listOf(
+                "The gate to the storage yard is locked\nYou try it with your key. And...\nThe storage yard is unlocked\nA banana is conveniently placed on a stool"
+            ),
+            listOf("Read Note", "Next", "Done"),
+            "Banana",
+            "Key"
+        )
+
+
+
+
+        mayorsMansion = Location("Mayor's Mansion", "A locked mansion.", "")
 
         locations.add(townCentre)
         locations.add(scummBar)
@@ -93,8 +181,8 @@ class App {
         locations.add(jail)
         locations.add(alley)
         locations.add(storageYard)
-        locations.add(clockTowerBase)
-        locations.add(topOfClockTower)
+        locations.add(botOfClock)
+        locations.add(topOfClock)
         locations.add(mayorsMansion)
 
 
@@ -106,7 +194,7 @@ class App {
         townCentre.connectLocation.add(generalStore)
         townCentre.connectLocation.add(jail)
         townCentre.connectLocation.add(alley)
-        townCentre.connectLocation.add(clockTowerBase)
+        townCentre.connectLocation.add(botOfClock)
         townCentre.connectLocation.add(mayorsMansion)
 
         scummBar.connectLocation.add(townCentre)
@@ -120,16 +208,20 @@ class App {
 
         storageYard.connectLocation.add(alley)
 
-        clockTowerBase.connectLocation.add(townCentre)
-        clockTowerBase.connectLocation.add(topOfClockTower)
+        botOfClock.connectLocation.add(townCentre)
+        botOfClock.connectLocation.add(topOfClock)
 
-        topOfClockTower.connectLocation.add(clockTowerBase)
+        topOfClock.connectLocation.add(botOfClock)
 
         mayorsMansion.connectLocation.add(townCentre)
 
         currentLocation = townCentre
+//        currentQuest = townCentre
     }
 
+    fun getItem() {
+        itemInHand = currentLocation.rewardItem
+    }
 }
 
 
@@ -161,12 +253,11 @@ class MainWindow(val app: App) {
     private val scummbutton = JButton("To Scumm Bar")
     private val generalbutton = JButton("To General Store")
     private val jailbutton = JButton("To Jail")
-    private val aleybutton = JButton("To Alley")
+    private val alleybutton = JButton("To Alley")
     private val storagebutton = JButton("To Storage Yard")
     private val botOfClockbutton = JButton("To Clock Tower")
     private val topOfClockbutton = JButton("To Top of Clock Tower")
     private val mayorbutton = JButton("To Mayor's Mansion")
-
 
     init {
         setupLayout()
@@ -176,23 +267,21 @@ class MainWindow(val app: App) {
         updateUI()
     }
 
-
     private fun setupLayout() {
-
         panel.preferredSize = java.awt.Dimension(1400, 800)
 
         titleLabel.setBounds(30, 30, 340, 30)
         infoLabel.setBounds(30, 90, 340, 30)
         notifLabel.setBounds(380, 450, 650, 200)
         dialogLabel.setBounds(380, 130, 1300, 50)
+
         action1Button.setBounds(600, 650, 170, 30)
         action2Button.setBounds(775, 650, 170, 30)
-
         centrebutton.setBounds(30, 650, 170, 30)
         scummbutton.setBounds(30, 690, 170, 30)
         generalbutton.setBounds(30, 730, 170, 30)
         jailbutton.setBounds(210, 650, 170, 30)
-        aleybutton.setBounds(210, 690, 170, 30)
+        alleybutton.setBounds(210, 690, 170, 30)
         storagebutton.setBounds(210, 730, 170, 30)
         botOfClockbutton.setBounds(390, 650, 170, 30)
         topOfClockbutton.setBounds(390, 690, 170, 30)
@@ -202,14 +291,14 @@ class MainWindow(val app: App) {
         panel.add(infoLabel)
         panel.add(notifLabel)
         panel.add(dialogLabel)
+
         panel.add(action1Button)
         panel.add(action2Button)
-
         panel.add(centrebutton)
         panel.add(scummbutton)
         panel.add(generalbutton)
         panel.add(jailbutton)
-        panel.add(aleybutton)
+        panel.add(alleybutton)
         panel.add(storagebutton)
         panel.add(botOfClockbutton)
         panel.add(topOfClockbutton)
@@ -228,7 +317,7 @@ class MainWindow(val app: App) {
         scummbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
         generalbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
         jailbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
-        aleybutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
+        alleybutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
         storagebutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
         botOfClockbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
         topOfClockbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
@@ -237,17 +326,11 @@ class MainWindow(val app: App) {
 
 
     private fun setupWindow() {
-
         frame.isResizable = false // Can't resize
-
         frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE // Exit upon window close
-
         frame.contentPane = panel // Define the main content
-
         frame.pack()
-
         frame.setLocationRelativeTo(null) // Centre on the screen
-
     }
 
 
@@ -255,72 +338,22 @@ class MainWindow(val app: App) {
 
         centrebutton.addActionListener { goLocation(app.townCentre) }
         scummbutton.addActionListener { goLocation(app.scummBar) }
-
-        // TODO
-
-        generalbutton.addActionListener {
-
-            goLocation(app.locations[2])
-
-        }
-
-        jailbutton.addActionListener {
-
-            goLocation(app.locations[3])
-
-        }
-
-        aleybutton.addActionListener {
-
-            goLocation(app.locations[4])
-
-        }
-
-        storagebutton.addActionListener {
-
-            goLocation(app.locations[5])
-
-        }
-
-        botOfClockbutton.addActionListener {
-
-            goLocation(app.locations[6])
-
-        }
-
-        topOfClockbutton.addActionListener {
-
-            goLocation(app.locations[7])
-
-        }
-
-        mayorbutton.addActionListener {
-
-            goLocation(app.locations[8])
-
-        }
-
-
+        generalbutton.addActionListener { goLocation(app.generalStore) }
+        jailbutton.addActionListener { goLocation(app.jail) }
+        alleybutton.addActionListener { goLocation(app.alley) }
+        storagebutton.addActionListener { goLocation(app.storageYard) }
+        botOfClockbutton.addActionListener { goLocation(app.botOfClock) }
+        topOfClockbutton.addActionListener { goLocation(app.topOfClock) }
+        mayorbutton.addActionListener { goLocation(app.mayorsMansion) }
 
         action1Button.addActionListener {
-
             processPlayerAction(1)
-
             updateUI()
-
         }
-
-
-
         action2Button.addActionListener {
-
             processPlayerAction(2)
-
             updateUI()
-
         }
-
-
     }
 
 
@@ -328,58 +361,55 @@ class MainWindow(val app: App) {
 
         val location = app.currentLocation
         val name = location.name
+        val description = location.description
 
-        infoLabel.text = "You are at ${location.name}, ${location.description}" // was going
+        infoLabel.text = "You are at ${name}, ${description}" // was going
 
-        // TODO
+        notifLabel.text = "ITEM: " + app.itemInHand
+
+        if (app.itemInHand == location.requiredItem) {
+            dialogLabel.text = location.questNotes[location.currentQuestNote]
+            action1Button.isVisible = true
+            action1Button.text = location.actionText[location.currentQuestNote]
+        } else {
+            dialogLabel.text = location.noQuestNotes
+            action1Button.isVisible = false
+        }
 
         centrebutton.isEnabled = location.connectLocation.contains(app.townCentre)
         scummbutton.isEnabled = location.connectLocation.contains(app.scummBar)
-        generalbutton.isEnabled = false
-        jailbutton.isEnabled = false
-        aleybutton.isEnabled = false
-        storagebutton.isEnabled = false
-        botOfClockbutton.isEnabled = false
-        topOfClockbutton.isEnabled = false
-        mayorbutton.isEnabled =
-            false // only want to display the current location links to the options of buttons. Therefore, they are NOT visible by default.
+        generalbutton.isEnabled = location.connectLocation.contains(app.generalStore)
+        jailbutton.isEnabled = location.connectLocation.contains(app.jail)
+        alleybutton.isEnabled = location.connectLocation.contains(app.alley)
+        storagebutton.isEnabled = location.connectLocation.contains(app.storageYard)
+        botOfClockbutton.isEnabled = location.connectLocation.contains(app.botOfClock)
+        topOfClockbutton.isEnabled = location.connectLocation.contains(app.mayorsMansion)
+        mayorbutton.isEnabled = location.connectLocation.contains(app.mayorsMansion)
     }
 
     private fun processPlayerAction(action: Int) {
 
         val location = app.currentLocation
 
-        // first encounter // where you get info on what to do.
-        if (app.contact == false) {
-            notifLabel.text = location.notes[0] //calls the first note
-            action1Button.text = "Read note"
-            action2Button.text = "Leave the note"
-            return
+        if (location.questCompleted()) {
+            println("DONE")
+            app.getItem()
+        } else {
+            location.nextNote()
         }
-        if (location == app.scummBar && action == 1) {
-            notifLabel.isVisible = false //hides the initial message
-            dialogLabel.text = location.notes[1]
-            action1Button.text = "Continue reading"
-            return
-        }
-        if (location == app.scummBar && action == 2) {
-            dialogLabel.text = location.notes[2]
-            app.contact = true
-            return
-        }
+
+        updateUI()
     }
 
     private fun goLocation(destination: Location) {
         app.currentLocation = destination
+        destination.reset()
         updateUI()
     }
-
 
     fun show() {
         frame.isVisible = true
     }
-
-
 }
 
 
