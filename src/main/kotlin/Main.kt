@@ -5,6 +5,8 @@ import java.awt.Font
 import javax.swing.*
 
 
+
+
 /**
  * Application entry point
  */
@@ -30,7 +32,7 @@ class Location(
     val noQuestNotes: String,
     val questNotes: List<String> = listOf(),
     val actionText: List<String> = listOf(),
-    val rewardItem: String? = null, // changed to a list so that multiple
+    val rewardItem: String? = null,
     val requiredItem: String? = null
 ) {
     var currentQuestNote: Int = 0
@@ -74,8 +76,9 @@ class App {
 
     init {
 
-        val converation = "You have spoken to Guybrush"
+        val conversation = "You have spoken to Guybrush"
         val coins = "5 coins"
+        val cog = "Rusty cog"
 
         // Initial meeting/note from Guybrush
         townCentre = Location(
@@ -83,40 +86,46 @@ class App {
             "The centre of town.",
             "The Town centre is empty",
             listOf(
-                "<html>You wake up with no memory of last night.<br>A note on the floor reads: Dear entrusted one -G.T.</html>", // Dialog
-                "<html>Guybrush: It is I, the mighty pirate Guybrush Threepwood!<br>Calm yourself and listen closely to the quest I have for you.</html>", // Dialog
-                "<html>Guybrush: I'm stuck in the Mansion. Fix the clock tower and bring me a snack, I'm starving!! And I nearly forgot... bring Stan so he can convince Elaine to let me out!</html>" // Dialog
+                "<html>You wake up with no memory of last night.<html>",
+                "<html>A note on the floor reads: Dear entrusted one -G.T.<html>",
+                "<html>It is I, the mighty pirate Guybrush Threepwood!\n I know this is a great honour, but please... Calm yourself and listen closely to the quest I have for you.<html>",
+                "<html>Guybrush: Elaine has me stuck inside of the mansion... She doesn't seem too pleased with me.<html>",
+                "<html>But I'm sure if you take care of the chores around town...\n I'm sure that She'll be slightly happier.<html>",
+                "<html>Though, now that I think about it... I'm not too sure what she does...<html>",
+                "<html>Maybe start by visiting the bar? Surely they have something that needs doing...<html>"
             ),
-            listOf("Read Note", "Next", "Done"),
-            converation
+            listOf("Continue","Read Note", "Next", "Next","Next", "Next", "Done"),
+            conversation,
+            null
         )
 
-        // Route 1
         scummBar = Location(
             "Scumm Bar",
             "A noisy pirate bar.",
             "Hello, sailor! Come back later",
             listOf(
-                "<html>Cook: Arg! There's a giant, red-eyed rat in the pantry!\nYou there!\nChase it out of here and I'll give ye 5 coins for the trouble!<html>", // Dialog
-                "<html>Cook: Thank you me lad, ere's your money.<html>", // Dialog
-                "You now have $5. But... Where can you spend it?", // Notif label
-                "You approach the chef and ask how much grog is\nGrog is $5. But for you, me lad, I'll give you this special one for free" // Dialog
+                "<html>You notice the a cook perched atop a table quivering slightly<html>",
+                "<html>Cook: Arg! There's a giant, red-eyed rat scurrying about!<html>",
+                "<html>Cook: You there! The Cook shouts.\n If you manage rid of it, I'll give ye 5 coins for the trouble!<html>",
+                "<html>You kicked the rat.<html>",
+                "<html>Cook: Thank you me lad, ere's your money.<html>",
+                "<html>You gained 5 coins. But... What should you do with it?<html>"
             ),
-            listOf("Read Note", "Next", "Done"),
+            listOf("Continue", "Next", "Kick rat", "Continue", "Next", "Done"),
             coins,
-            converation
+            conversation
         )
 
         generalStore = Location(
             "General Store",
             "A shop with odd items.",
-            "",
+            "G'day, I have nothing for sale right now!",
             listOf(
                 "You got Rusty Cog!" // Notif
             ),
             listOf("Read Note", "Next", "Done"),
-            "Rusty Cog",
-            "5 coins"
+            cog,
+            coins
         )
 
         botOfClock = Location("Clock Tower Base", "Base of the old tower.", "")
@@ -136,7 +145,7 @@ class App {
         jail = Location(
             "Jail",
             "A small stone jail.",
-            "",
+            "Guard: I'm not in the mood for you right now. Come back later.",
             listOf(
                 "Walking past the jail you hear someone call out.\nIt's Stan (of course it is).\nYou asked the jailer if he would let Stan out\nYou can have the key if you bring me grog, says the guard.",
                 "You make the trade with the guard\nThe grog is gone in seconds, and... \nthe guard fell asleep??\nWhether this was the ominous power of the grog, we'll never know.",
@@ -150,7 +159,7 @@ class App {
         alley = Location(
             "Alley",
             "A narrow alley with stray dogs.",
-            "",
+            "Dodgy dealer: Sorry lad, I'm out of Grog for now.",
             listOf(
 
             ),
@@ -170,11 +179,11 @@ class App {
             "Key"
         )
 
+        mayorsMansion = Location(
+            "Mayor's Mansion",
+            "The mayors grand mansion.", // Can't believe I had it as a 'locked mansion' for so long when it is locked until you are inside of it.
 
-
-
-        mayorsMansion = Location("Mayor's Mansion", "A locked mansion.", "")
-
+            "")
         locations.add(townCentre)
         locations.add(scummBar)
         locations.add(generalStore)
@@ -237,7 +246,7 @@ class App {
 
 class MainWindow(val app: App) {
 
-    val frame = JFrame("Meelé Island")
+    val frame = JFrame("Meelé Island explorer")
 
     private val panel = JPanel().apply { layout = null }
 
@@ -247,7 +256,7 @@ class MainWindow(val app: App) {
     private val dialogLabel = JLabel()
 
     private var action1Button = JButton("Doing zilch")
-    private var action2Button = JButton("Doing zilch")
+//    private var action2Button = JButton("Doing zilch")
 
     private val centrebutton = JButton("To Town Centre")
     private val scummbutton = JButton("To Scumm Bar")
@@ -270,13 +279,13 @@ class MainWindow(val app: App) {
     private fun setupLayout() {
         panel.preferredSize = java.awt.Dimension(1400, 800)
 
-        titleLabel.setBounds(30, 30, 340, 30)
-        infoLabel.setBounds(30, 90, 340, 30)
+        titleLabel.setBounds(600, 30, 340, 30)
+        infoLabel.setBounds(550, 90, 340, 30)
         notifLabel.setBounds(380, 450, 650, 200)
-        dialogLabel.setBounds(380, 130, 1300, 50)
+        dialogLabel.setBounds(30, 60, 650, 500)
 
         action1Button.setBounds(600, 650, 170, 30)
-        action2Button.setBounds(775, 650, 170, 30)
+//        action2Button.setBounds(775, 650, 170, 100)
         centrebutton.setBounds(30, 650, 170, 30)
         scummbutton.setBounds(30, 690, 170, 30)
         generalbutton.setBounds(30, 730, 170, 30)
@@ -293,7 +302,7 @@ class MainWindow(val app: App) {
         panel.add(dialogLabel)
 
         panel.add(action1Button)
-        panel.add(action2Button)
+//        panel.add(action2Button)
         panel.add(centrebutton)
         panel.add(scummbutton)
         panel.add(generalbutton)
@@ -312,7 +321,7 @@ class MainWindow(val app: App) {
         notifLabel.font = Font(Font.SANS_SERIF, Font.BOLD, 20)
         dialogLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 16)
         action1Button.font = Font(Font.SANS_SERIF, Font.BOLD, 12)
-        action2Button.font = Font(Font.SANS_SERIF, Font.BOLD, 12)
+//        action2Button.font = Font(Font.SANS_SERIF, Font.BOLD, 12)
         centrebutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
         scummbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
         generalbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
@@ -350,10 +359,10 @@ class MainWindow(val app: App) {
             processPlayerAction(1)
             updateUI()
         }
-        action2Button.addActionListener {
-            processPlayerAction(2)
-            updateUI()
-        }
+//        action2Button.addActionListener {
+//            processPlayerAction(2)
+//            updateUI()
+//        }
     }
 
 
@@ -365,7 +374,7 @@ class MainWindow(val app: App) {
 
         infoLabel.text = "You are at ${name}, ${description}" // was going
 
-        notifLabel.text = "ITEM: " + app.itemInHand
+//        notifLabel.text = "ITEM: " + app.itemInHand // Don't need this except for test
 
         if (app.itemInHand == location.requiredItem) {
             dialogLabel.text = location.questNotes[location.currentQuestNote]
