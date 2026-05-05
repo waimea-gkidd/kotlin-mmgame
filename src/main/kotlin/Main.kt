@@ -79,6 +79,10 @@ class App {
         val conversation = "You have spoken to Guybrush"
         val coins = "5 coins"
         val cog = "Rusty cog"
+        val NOTHING = "Paper plane"
+        val Find = "Find Stan"
+        val Key = "Useless key"
+        val Banana = "Holy Banana"
 
         // Initial meeting/note from Guybrush
         townCentre = Location(
@@ -86,13 +90,13 @@ class App {
             "The centre of town.",
             "The Town centre is empty",
             listOf(
-                "<html>You wake up with no memory of last night.<html>",
-                "<html>A note on the floor reads: Dear entrusted one -G.T.<html>",
+                "You wake up with no memory of last night.",
+                "A note on the floor reads: Dear entrusted one -G.T.",
                 "<html>It is I, the mighty pirate Guybrush Threepwood!\n I know this is a great honour, but please... Calm yourself and listen closely to the quest I have for you.<html>",
                 "<html>Guybrush: Elaine has me stuck inside of the mansion... She doesn't seem too pleased with me.<html>",
                 "<html>But I'm sure if you take care of the chores around town...\n I'm sure that She'll be slightly happier.<html>",
                 "<html>Though, now that I think about it... I'm not too sure what she does...<html>",
-                "<html>Maybe start by visiting the bar? Surely they have something that needs doing...<html>"
+                "<html>SYSTEM: Maybe start by visiting the bar? Surely they have something that needs doing...<html>"
             ),
             listOf("Continue","Read Note", "Next", "Next","Next", "Next", "Done"),
             conversation,
@@ -102,14 +106,14 @@ class App {
         scummBar = Location(
             "Scumm Bar",
             "A noisy pirate bar.",
-            "Hello, sailor! Come back later",
+            "Hello, sailor! Come back another time",
             listOf(
-                "<html>You notice the a cook perched atop a table quivering slightly<html>",
-                "<html>Cook: Arg! There's a giant, red-eyed rat scurrying about!<html>",
+                "You notice the a cook perched atop a table quivering slightly",
+                "Cook: Arg! There's a giant, red-eyed rat scurrying about!",
                 "<html>Cook: You there! The Cook shouts.\n If you manage rid of it, I'll give ye 5 coins for the trouble!<html>",
-                "<html>You kicked the rat.<html>",
-                "<html>Cook: Thank you me lad, ere's your money.<html>",
-                "<html>You gained 5 coins. But... What should you do with it?<html>"
+                "You kicked the rat.",
+                "Cook: Thank you me lad, ere's your money.",
+                "SYSTEM: You gained ${coins}. But... What should you do with it?" // coins obviously doesn't do anything. Thought t'was a good use is all.
             ),
             listOf("Continue", "Next", "Kick rat", "Continue", "Next", "Done"),
             coins,
@@ -119,26 +123,47 @@ class App {
         generalStore = Location(
             "General Store",
             "A shop with odd items.",
-            "G'day, I have nothing for sale right now!",
+            "Old man: Outta me store! I've nothin' for ye",
             listOf(
-                "You got Rusty Cog!" // Notif
+                "Infront of you sist a grumpy looking scruffy old man",
+                "Old grump: Wad ye wan?",
+                "Old grump: You the handyman for the clock tower?",
+                "<html>Old grump: Well why didn't ye say so?\n All the gear you needs already upstairs\n ${cog+"'ll"} be ${coins}<html>",
+                "SYSTEM: You got ${cog+"!"}"
             ),
-            listOf("Read Note", "Next", "Done"),
+            listOf("Continue", "Stare blankly", "Sure...", "Buy ${cog}", "Done"),
             cog,
             coins
         )
-
-        botOfClock = Location("Clock Tower Base", "Base of the old tower.", "")
 
         topOfClock = Location(
             "Top of Clock Tower",
             "The top of the tower.",
             "",
             listOf(
-                "You fixed the broken clock tower"
+                "<html>You found all the required tools to fix the clock tower conveniently layed out<html>",
+                "SYSTEM: You fixed the broken clock tower"
             ),
-            listOf("Read Note", "Next", "Done"),
-            "Rusty Cog"
+            listOf("Fix clock", "Done"),
+            NOTHING,
+            cog
+        )
+
+        botOfClock = Location(
+            "Clock Tower Base",
+            "Base of the old tower.",
+            "There is NOTHING to do here.",
+            listOf(
+                "<html>As you reach the bottom of the stairs you notice a ${NOTHING} infront of you<html>",
+                "<html>The plane has the words ${"Read Me"} scribbled on it<html>",
+                "You unfold it and it reads...",
+                "It's me again, Guybrush!\n Elaine is mildly happier... just bring Stand and I'm sure he'll convince her.",
+                "If you haven't already met Stan... and trust me, you'd know...",
+                "He's either in the local prison, or He's inside a barrel in the middle of the sea."
+            ),
+            listOf("Pick up", "Unfold", "Continue", "Next", "Next", "Done"),
+            Find,
+            NOTHING
         )
 
         // Route 2 (will fix the schema here a little later on)
@@ -147,24 +172,24 @@ class App {
             "A small stone jail.",
             "Guard: I'm not in the mood for you right now. Come back later.",
             listOf(
-                "Walking past the jail you hear someone call out.\nIt's Stan (of course it is).\nYou asked the jailer if he would let Stan out\nYou can have the key if you bring me grog, says the guard.",
-                "You make the trade with the guard\nThe grog is gone in seconds, and... \nthe guard fell asleep??\nWhether this was the ominous power of the grog, we'll never know.",
-                "The key doesnt work. Instead, Stan walks out on his own.\nHmm, Stan mutters.\nGuess he never locked it.\nThat key there must've been for something else."
+                "Walking past the jail you hear someone call out. It just so happens to be Stan (of course it is).",
+                "Stan: Hey!... Hey you there... You've gotta get me outta here.",
+                "The Jail Guard sits drunkly on a stool",
+                "After talking to the drunk you manage to convince him to wager his keys to the cell for 10 (non existent) coins)",
+                "The coin lands... and... it lands heads, and you lose. Buuuut... the guard doesn't know that.",
+                "Just as the drunken Guard hands over his keys, Stand opens the door to his cell...\n I-I guess it was never locked, Ha Ha... Ha.",
+                "Oh well we have his keys now, lets go and see what they unlock",
+                "SYSTEM: Maybe check somewhere you haven't so far"
             ),
-            listOf("Read Note", "Next", "Done"),
-            "Key",
-            "Grog"
+            listOf("Talk", "Next","Next", "Next", "Lie","Continue", "Continue", "Done"),
+            Key,
+            Find
         )
 
         alley = Location(
             "Alley",
             "A narrow alley with stray dogs.",
-            "Dodgy dealer: Sorry lad, I'm out of Grog for now.",
-            listOf(
-
-            ),
-            listOf("Read Note", "Next", "Done"),
-            "Grog",
+            "Might as well be a wasteland",
         )
 
         storageYard = Location(
@@ -172,11 +197,14 @@ class App {
             "A yard full of crates.",
             "",
             listOf(
-                "The gate to the storage yard is locked\nYou try it with your key. And...\nThe storage yard is unlocked\nA banana is conveniently placed on a stool"
+                "The gate to the storage yard is locked with a padlock the same colour as your key.",
+                "You try it with your key.",
+                "The storage yard is unlocked",
+                "A banana is conveniently placed on a stool"
             ),
             listOf("Read Note", "Next", "Done"),
-            "Banana",
-            "Key"
+            Banana,
+            Key
         )
 
         mayorsMansion = Location(
