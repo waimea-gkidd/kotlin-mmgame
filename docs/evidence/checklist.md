@@ -14,12 +14,12 @@ The game functions correctly and meets the specification:
 
 - [X] The game is **playable**
 - [X] The game has a **GUI** with a range of controls
-- [ ] The **instructions** for the game are available via the GUI
+- [X] The **instructions** for the game are available via the GUI
 - [X] Player provides game **inputs via the GUI** (e.g. moves, actions)
 - [X] The **current status** of the game is **shown in the GUI**, updated each player input
 - [X] The game is based on a **non-trivial map**
 - [X] The player can **move between locations**
-- [ ] The player has a **clear purpose** they can attempt to achieve
+- [X] The player has a **clear purpose** they can attempt to achieve
 - [ ] A **win / end / loss state** is possible
 
 ### Program Code
@@ -69,7 +69,7 @@ The program has been tested and there is documented evidence that:
 The program stores data using variables, where:
 
 - [ ] Variable **names are well-chosen** (relating to their purpose)
-- [ ] Variable names **begin with lowercase**
+- [X] Variable names **begin with lowercase**
 - [ ] Naming is consistent, either **camelCase or snake_case**
 - [ ] Variables are **scoped appropriately** (global or local to a function)
 - [ ] **Global** variables are only used if **genuinely needed**

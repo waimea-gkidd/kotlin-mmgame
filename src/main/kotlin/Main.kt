@@ -22,7 +22,7 @@ fun main() {
 
  * @property name the user's name
  * @property score the points earned
- */
+F */
 
 class Location(
     val name: String,
@@ -38,7 +38,7 @@ class Location(
     val connectLocation = mutableListOf<Location>()
     var questCompleted = false
 
-    fun reset() {
+    fun reset() { // This makes the Note count jump bac down to the starting value when a quest is finished
         currentQuestNote = 0
     }
 
@@ -63,13 +63,13 @@ class App {
     var itemInHand: String? = null
 
     val townCentre: Location
-    val scummBar: Location
-    val generalStore: Location
+    val bar: Location
+    val store: Location
     val jail: Location
     val alley: Location
-    val storageYard: Location
-    val botOfClock: Location
-    val topOfClock: Location
+    val yard: Location
+    val clock: Location
+    val spire: Location
     val mayorsMansion: Location
 
     init {
@@ -87,7 +87,7 @@ class App {
         townCentre = Location(
             "Town Centre",
             "The centre of town.",
-            "The Town centre is empty",
+            "Help Guybrush escape the mansion",
             listOf(
                 "You wake up with no memory of last night.",
                 "A note on the floor reads: Dear entrusted one -G.T.",
@@ -102,7 +102,7 @@ class App {
             null
         )
 
-        scummBar = Location(
+        bar = Location(
             "Scumm Bar",
             "A noisy pirate bar.",
             "Hello, sailor! Come back another time",
@@ -119,7 +119,7 @@ class App {
             conversation
         )
 
-        generalStore = Location(
+        store = Location(
             "General Store",
             "A shop with odd items.",
             "Old man: Outta me store! I've nothin' for ye",
@@ -135,8 +135,8 @@ class App {
             coins
         )
 
-        topOfClock = Location(
-            "Top of Clock Tower",
+        spire = Location(
+            "Spire",
             "The top of the tower.",
             "",
             listOf(
@@ -148,7 +148,7 @@ class App {
             cog
         )
 
-        botOfClock = Location(
+        clock = Location(
             "Clock Tower Base",
             "Base of the old tower.",
             "There is NOTHING to do here.",
@@ -189,9 +189,13 @@ class App {
             "Alley",
             "A narrow alley with stray dogs.",
             "Might as well be a wasteland",
+            listOf(""),
+            listOf(""),
+            "",
+            "",
         )
 
-        storageYard = Location(
+        yard = Location(
             "Storage Yard",
             "A yard full of crates.",
             "",
@@ -211,7 +215,7 @@ class App {
             "Mayor's Mansion",
             "The mayors grand mansion.", // Can't believe I had it as a 'locked mansion' for so long when it is locked until you are inside of it.
 
-            "",
+            "The mansion is locked right now",
             listOf(
                 "The gates of the mansion slowly open to you...",
                 "To be continued"
@@ -219,17 +223,18 @@ class App {
             listOf("Continue", "End"),
             end,
             Banana,
-            true
+            true,
+
         )
 
         locations.add(townCentre)
-        locations.add(scummBar)
-        locations.add(generalStore)
+        locations.add(bar)
+        locations.add(store)
         locations.add(jail)
         locations.add(alley)
-        locations.add(storageYard)
-        locations.add(botOfClock)
-        locations.add(topOfClock)
+        locations.add(yard)
+        locations.add(clock)
+        locations.add(spire)
         locations.add(mayorsMansion)
 
 
@@ -237,28 +242,28 @@ class App {
 
 // Also note that the locations themselves were derrived from chatGPT (I ain't writing all'at) the code was myself from preexisting samples.
 
-        townCentre.connectLocation.add(scummBar)
-        townCentre.connectLocation.add(generalStore)
+        townCentre.connectLocation.add(bar)
+        townCentre.connectLocation.add(store)
         townCentre.connectLocation.add(jail)
         townCentre.connectLocation.add(alley)
-        townCentre.connectLocation.add(botOfClock)
+        townCentre.connectLocation.add(clock)
         townCentre.connectLocation.add(mayorsMansion)
 
-        scummBar.connectLocation.add(townCentre)
+        bar.connectLocation.add(townCentre)
 
-        generalStore.connectLocation.add(townCentre)
+        store.connectLocation.add(townCentre)
 
         jail.connectLocation.add(townCentre)
 
-        alley.connectLocation.add(storageYard)
+        alley.connectLocation.add(yard)
         alley.connectLocation.add(townCentre)
 
-        storageYard.connectLocation.add(alley)
+        yard.connectLocation.add(alley)
 
-        botOfClock.connectLocation.add(townCentre)
-        botOfClock.connectLocation.add(topOfClock)
+        clock.connectLocation.add(townCentre)
+        clock.connectLocation.add(spire)
 
-        topOfClock.connectLocation.add(botOfClock)
+        spire.connectLocation.add(clock)
 
         mayorsMansion.connectLocation.add(townCentre)
 
@@ -287,24 +292,26 @@ class MainWindow(val app: App) {
     val frame = JFrame("Meelé Island explorer")
 
     private val panel = JPanel().apply { layout = null }
+    val mapIcon = ImageIcon(ClassLoader.getSystemResource("Map.png"))
 
     private val titleLabel = JLabel("Meelé island explorer")
     private val infoLabel = JLabel()
     private val notifLabel = JLabel()
     private val dialogLabel = JLabel()
+    private val mapLabel = JLabel(mapIcon)
 
     private var action1Button = JButton("Doing zilch")
 //    private var action2Button = JButton("Doing zilch")
 
-    private val centrebutton = JButton("To Town Centre")
-    private val scummbutton = JButton("To Scumm Bar")
-    private val generalbutton = JButton("To General Store")
-    private val jailbutton = JButton("To Jail")
-    private val alleybutton = JButton("To Alley")
-    private val storagebutton = JButton("To Storage Yard")
-    private val botOfClockbutton = JButton("To Clock Tower")
-    private val topOfClockbutton = JButton("To Top of Clock Tower")
-    private val mayorbutton = JButton("To Mayor's Mansion")
+    private val centrebutton = JButton("Town Centre")
+    private val barbutton = JButton("Scumm Bar")
+    private val storebutton = JButton("Store")
+    private val jailbutton = JButton("Jail")
+    private val alleybutton = JButton("Alley")
+    private val yardbutton = JButton("Yard")
+    private val clockbutton = JButton("Clock Tower")
+    private val spirebutton = JButton("Spire") // Shorter word for the top of a clock tower
+    private val mansionbutton = JButton("Mansion")
 
     init {
         setupLayout()
@@ -320,19 +327,20 @@ class MainWindow(val app: App) {
         titleLabel.setBounds(600, 30, 340, 30)
         infoLabel.setBounds(550, 90, 340, 30)
         notifLabel.setBounds(380, 450, 650, 200)
-        dialogLabel.setBounds(30, 60, 650, 500)
+        dialogLabel.setBounds(120, 250, 650, 500)
+        mapLabel.setBounds(500, 60, 1100, 750)
 
-        action1Button.setBounds(600, 650, 170, 30)
+        action1Button.setBounds(180, 650, 170, 30)
 //        action2Button.setBounds(775, 650, 170, 100)
-        centrebutton.setBounds(30, 650, 170, 30)
-        scummbutton.setBounds(30, 690, 170, 30)
-        generalbutton.setBounds(30, 730, 170, 30)
-        jailbutton.setBounds(210, 650, 170, 30)
-        alleybutton.setBounds(210, 690, 170, 30)
-        storagebutton.setBounds(210, 730, 170, 30)
-        botOfClockbutton.setBounds(390, 650, 170, 30)
-        topOfClockbutton.setBounds(390, 690, 170, 30)
-        mayorbutton.setBounds(390, 730, 170, 30)
+        centrebutton.setBounds(1000, 530, 120, 30)
+        barbutton.setBounds(770, 460, 120, 30)
+        storebutton.setBounds(803, 605, 80, 30)
+        jailbutton.setBounds(1248, 440, 80, 30)
+        alleybutton.setBounds(1248, 565, 80, 30)
+        yardbutton.setBounds(1248, 640, 80, 30)
+        clockbutton.setBounds(1120, 300, 100, 30)
+        spirebutton.setBounds(1130, 220, 80, 30)
+        mansionbutton.setBounds(955, 225, 120, 30)
 
         panel.add(titleLabel)
         panel.add(infoLabel)
@@ -342,14 +350,15 @@ class MainWindow(val app: App) {
         panel.add(action1Button)
 //        panel.add(action2Button)
         panel.add(centrebutton)
-        panel.add(scummbutton)
-        panel.add(generalbutton)
+        panel.add(barbutton)
+        panel.add(storebutton)
         panel.add(jailbutton)
         panel.add(alleybutton)
-        panel.add(storagebutton)
-        panel.add(botOfClockbutton)
-        panel.add(topOfClockbutton)
-        panel.add(mayorbutton)
+        panel.add(yardbutton)
+        panel.add(clockbutton)
+        panel.add(spirebutton)
+        panel.add(mansionbutton)
+        panel.add(mapLabel) // Has to be last bc otherwise it overlays ontop of buttons
     }
 
 
@@ -361,14 +370,14 @@ class MainWindow(val app: App) {
         action1Button.font = Font(Font.SANS_SERIF, Font.BOLD, 12)
 //        action2Button.font = Font(Font.SANS_SERIF, Font.BOLD, 12)
         centrebutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
-        scummbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
-        generalbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
+        barbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
+        storebutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
         jailbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
         alleybutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
-        storagebutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
-        botOfClockbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
-        topOfClockbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
-        mayorbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
+        yardbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
+        clockbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
+        spirebutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
+        mansionbutton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
     }
 
 
@@ -384,14 +393,14 @@ class MainWindow(val app: App) {
     private fun setupActions() {
 
         centrebutton.addActionListener { goLocation(app.townCentre) }
-        scummbutton.addActionListener { goLocation(app.scummBar) }
-        generalbutton.addActionListener { goLocation(app.generalStore) }
+        barbutton.addActionListener { goLocation(app.bar) }
+        storebutton.addActionListener { goLocation(app.store) }
         jailbutton.addActionListener { goLocation(app.jail) }
         alleybutton.addActionListener { goLocation(app.alley) }
-        storagebutton.addActionListener { goLocation(app.storageYard) }
-        botOfClockbutton.addActionListener { goLocation(app.botOfClock) }
-        topOfClockbutton.addActionListener { goLocation(app.topOfClock) }
-        mayorbutton.addActionListener { goLocation(app.mayorsMansion) }
+        yardbutton.addActionListener { goLocation(app.yard) }
+        clockbutton.addActionListener { goLocation(app.clock) }
+        spirebutton.addActionListener { goLocation(app.spire) }
+        mansionbutton.addActionListener { goLocation(app.mayorsMansion) }
 
         action1Button.addActionListener {
             processPlayerAction(1)
@@ -409,16 +418,17 @@ class MainWindow(val app: App) {
         val location = app.currentLocation
         val name = location.name
         val description = location.description
+        val link = app.currentLocation.connectLocation
 
         infoLabel.text = "You are at ${name}, ${description}" // was going
 
-        if (location.requiredItem == null) { // I thought it was ugly to display null as an item. Hence, I did this.
-            notifLabel.text = "You have no items"
-        } else {
-            notifLabel.text = "Item: " + app.itemInHand // Don't need this except for test
-        }
-        if (location.requiredItem == null) {
-        }
+//        if (location.requiredItem == null) { // I thought it was ugly to display null as an item. Hence, I did this.
+//            notifLabel.text = "You have no items"
+//        } else {
+//            notifLabel.text = "Item: " + app.itemInHand // Don't need this except for test
+//        }
+//        if (location.requiredItem == null) {
+//        }
 
         if (app.itemInHand == location.requiredItem) {
             dialogLabel.text = location.questNotes[location.currentQuestNote]
@@ -434,15 +444,20 @@ class MainWindow(val app: App) {
 
         }
 
-        centrebutton.isEnabled = location.connectLocation.contains(app.townCentre)
-        scummbutton.isEnabled = location.connectLocation.contains(app.scummBar)
-        generalbutton.isEnabled = location.connectLocation.contains(app.generalStore)
-        jailbutton.isEnabled = location.connectLocation.contains(app.jail)
-        alleybutton.isEnabled = location.connectLocation.contains(app.alley)
-        storagebutton.isEnabled = location.connectLocation.contains(app.storageYard)
-        botOfClockbutton.isEnabled = location.connectLocation.contains(app.botOfClock)
-        topOfClockbutton.isEnabled = location.connectLocation.contains(app.topOfClock)
-        mayorbutton.isEnabled = location.connectLocation.contains(app.mayorsMansion)
+        val locationButtons = mapOf( // Dt notes
+            centrebutton to app.townCentre,
+            barbutton to app.bar,
+            storebutton to app.store,
+            jailbutton to app.jail,
+            alleybutton to app.alley,
+            yardbutton to app.yard,
+            clockbutton to app.clock,
+            spirebutton to app.spire,
+            mansionbutton to app.mayorsMansion
+        )
+        for ((button, loc) in locationButtons) { // Dt notes
+            button.isEnabled = location.connectLocation.contains(loc)
+        }
     }
 
     private fun processPlayerAction(action: Int) {
@@ -456,6 +471,16 @@ class MainWindow(val app: App) {
             location.nextNote()
         }
 
+        if (location.end && location.questCompleted()) {
+            JOptionPane.showMessageDialog(
+                frame,
+                "Elaine opens the door...\nYou've completed your quest!",
+                "The END!",
+                JOptionPane.INFORMATION_MESSAGE
+            )
+            action1Button.isVisible = false
+            return
+        }
         updateUI()
     }
 
@@ -467,8 +492,17 @@ class MainWindow(val app: App) {
 
     fun show() {
         frame.isVisible = true
+
+        JOptionPane.showMessageDialog( // Dt notes. Game instructions.
+            frame,
+            "Use the buttons on the map to move between (linked) locations.\nClick the action button on the left to interact with quests.",
+            "How to Play",
+            JOptionPane.INFORMATION_MESSAGE
+        )
     }
+
 }
+
 
 
 /**
