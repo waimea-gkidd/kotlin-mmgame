@@ -288,13 +288,10 @@ class MainWindow(val app: App) {
 
     private val panel = JPanel().apply { layout = null }
 
-    val mapIcon = ImageIcon(ClassLoader.getSystemResource("MeeleMap.png"))
-
     private val titleLabel = JLabel("Meelé island explorer")
     private val infoLabel = JLabel()
     private val notifLabel = JLabel()
     private val dialogLabel = JLabel()
-    private val mapLabel = JLabel(mapIcon)
 
     private var action1Button = JButton("Doing zilch")
 //    private var action2Button = JButton("Doing zilch")
@@ -324,14 +321,13 @@ class MainWindow(val app: App) {
         infoLabel.setBounds(550, 90, 340, 30)
         notifLabel.setBounds(380, 450, 650, 200)
         dialogLabel.setBounds(30, 60, 650, 500)
-        mapLabel.setBounds(500, 60, 1100, 750)
 
         action1Button.setBounds(600, 650, 170, 30)
 //        action2Button.setBounds(775, 650, 170, 100)
-        centrebutton.setBounds(970, 530, 170, 30)
+        centrebutton.setBounds(30, 650, 170, 30)
         scummbutton.setBounds(30, 690, 170, 30)
         generalbutton.setBounds(30, 730, 170, 30)
-        jailbutton.setBounds(1243, 440, 80, 30)
+        jailbutton.setBounds(210, 650, 170, 30)
         alleybutton.setBounds(210, 690, 170, 30)
         storagebutton.setBounds(210, 730, 170, 30)
         botOfClockbutton.setBounds(390, 650, 170, 30)
@@ -342,7 +338,6 @@ class MainWindow(val app: App) {
         panel.add(infoLabel)
         panel.add(notifLabel)
         panel.add(dialogLabel)
-
 
         panel.add(action1Button)
 //        panel.add(action2Button)
@@ -355,7 +350,6 @@ class MainWindow(val app: App) {
         panel.add(botOfClockbutton)
         panel.add(topOfClockbutton)
         panel.add(mayorbutton)
-        panel.add(mapLabel)
     }
 
 
