@@ -13,12 +13,12 @@ too.
 The game functions correctly and meets the specification:
 
 - [X] The game is **playable**
-- [ ] The game has a **GUI** with a range of controls
+- [X] The game has a **GUI** with a range of controls
 - [ ] The **instructions** for the game are available via the GUI
-- [ ] Player provides game **inputs via the GUI** (e.g. moves, actions)
-- [ ] The **current status** of the game is **shown in the GUI**, updated each player input
-- [ ] The game is based on a **non-trivial map**
-- [ ] The player can **move between locations**
+- [X] Player provides game **inputs via the GUI** (e.g. moves, actions)
+- [X] The **current status** of the game is **shown in the GUI**, updated each player input
+- [X] The game is based on a **non-trivial map**
+- [X] The player can **move between locations**
 - [ ] The player has a **clear purpose** they can attempt to achieve
 - [ ] A **win / end / loss state** is possible
 
@@ -26,25 +26,25 @@ The game functions correctly and meets the specification:
 
 The program stores data using:
 
-- [ ] **Variables** of at least two types (e.g. int, text, boolean)
+- [X] **Variables** of at least two types (e.g. int, text, boolean)
 
 The program structure:
 
-- [ ] Defines and implements a **graphical user interface (GUI)**
-- [ ] Makes use of user-defined OOP **classes** from which **objects** are instantiated
-- [ ] Uses **functions** / **methods** to break up the code logically
-- [ ] Contains **sequences** of instructions
-- [ ] Uses **conditional** instructions to control the program flow
-- [ ] Uses program **branches** (if...else, when, etc.)
+- [X] Defines and implements a **graphical user interface (GUI)**
+- [X] Makes use of user-defined OOP **classes** from which **objects** are instantiated
+- [X] Uses **functions** / **methods** to break up the code logically
+- [X] Contains **sequences** of instructions
+- [X] Uses **conditional** instructions to control the program flow
+- [X] Uses program **branches** (if...else, when, etc.)
 - [ ] Uses **iteration** (loops) to repeat things (for, while, etc.)
 
 ### Program Documentation
 
 The program code:
 
-- [ ] Is **indented** correctly
-- [ ] Is **laid-out clearly**
-- [ ] Contains **comments** that help in understanding how it works
+- [X] Is **indented** correctly
+- [X] Is **laid-out clearly**
+- [X] Contains **comments** that help in understanding how it works
 
 ### Program Testing
 

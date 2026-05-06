@@ -5,8 +5,6 @@ import java.awt.Font
 import javax.swing.*
 
 
-
-
 /**
  * Application entry point
  */
@@ -33,7 +31,8 @@ class Location(
     val questNotes: List<String> = listOf(),
     val actionText: List<String> = listOf(),
     val rewardItem: String? = null,
-    val requiredItem: String? = null
+    val requiredItem: String? = null,
+    val end: Boolean = false
 ) {
     var currentQuestNote: Int = 0
     val connectLocation = mutableListOf<Location>()
@@ -62,7 +61,6 @@ class App {
 
     //    var currentQuest: Location
     var itemInHand: String? = null
-    var contact = false
 
     val townCentre: Location
     val scummBar: Location
@@ -82,7 +80,8 @@ class App {
         val NOTHING = "Paper plane"
         val Find = "Find Stan"
         val Key = "Useless key"
-        val Banana = "Holy Banana"
+        val Banana = "Mushy Banana"
+        val end = "The end"
 
         // Initial meeting/note from Guybrush
         townCentre = Location(
@@ -98,7 +97,7 @@ class App {
                 "<html>Though, now that I think about it... I'm not too sure what she does...<html>",
                 "<html>SYSTEM: Maybe start by visiting the bar? Surely they have something that needs doing...<html>"
             ),
-            listOf("Continue","Read Note", "Next", "Next","Next", "Next", "Done"),
+            listOf("Continue", "Read Note", "Next", "Next", "Next", "Next", "Done"),
             conversation,
             null
         )
@@ -128,8 +127,8 @@ class App {
                 "Infront of you sist a grumpy looking scruffy old man",
                 "Old grump: Wad ye wan?",
                 "Old grump: You the handyman for the clock tower?",
-                "<html>Old grump: Well why didn't ye say so?\n All the gear you needs already upstairs\n ${cog+"'ll"} be ${coins}<html>",
-                "SYSTEM: You got ${cog+"!"}"
+                "<html>Old grump: Well why didn't ye say so?\n All the gear you needs already upstairs\n ${cog + "'ll"} be ${coins}<html>",
+                "SYSTEM: You got ${cog + "!"}"
             ),
             listOf("Continue", "Stare blankly", "Sure...", "Buy ${cog}", "Done"),
             cog,
@@ -181,7 +180,7 @@ class App {
                 "Oh well we have his keys now, lets go and see what they unlock",
                 "SYSTEM: Maybe check somewhere you haven't so far"
             ),
-            listOf("Talk", "Next","Next", "Next", "Lie","Continue", "Continue", "Done"),
+            listOf("Talk", "Next", "Next", "Next", "Lie to Guard", "Continue", "Continue", "Done"),
             Key,
             Find
         )
@@ -200,9 +199,10 @@ class App {
                 "The gate to the storage yard is locked with a padlock the same colour as your key.",
                 "You try it with your key.",
                 "The storage yard is unlocked",
-                "A banana is conveniently placed on a stool"
+                "You find a ${Banana} conveniently placed on a stool",
+                "SYSTEM: You gained a ${Banana} for Guybrush"
             ),
-            listOf("Read Note", "Next", "Done"),
+            listOf("Continue", "Unlock", "Continue", "Next", "Done"),
             Banana,
             Key
         )
@@ -211,7 +211,17 @@ class App {
             "Mayor's Mansion",
             "The mayors grand mansion.", // Can't believe I had it as a 'locked mansion' for so long when it is locked until you are inside of it.
 
-            "")
+            "",
+            listOf(
+                "The gates of the mansion slowly open to you...",
+                "To be continued"
+            ),
+            listOf("Continue", "End"),
+            end,
+            Banana,
+            true
+        )
+
         locations.add(townCentre)
         locations.add(scummBar)
         locations.add(generalStore)
@@ -278,10 +288,13 @@ class MainWindow(val app: App) {
 
     private val panel = JPanel().apply { layout = null }
 
+    val mapIcon = ImageIcon(ClassLoader.getSystemResource("MeeleMap.png"))
+
     private val titleLabel = JLabel("Meelé island explorer")
     private val infoLabel = JLabel()
     private val notifLabel = JLabel()
     private val dialogLabel = JLabel()
+    private val mapLabel = JLabel(mapIcon)
 
     private var action1Button = JButton("Doing zilch")
 //    private var action2Button = JButton("Doing zilch")
@@ -311,13 +324,14 @@ class MainWindow(val app: App) {
         infoLabel.setBounds(550, 90, 340, 30)
         notifLabel.setBounds(380, 450, 650, 200)
         dialogLabel.setBounds(30, 60, 650, 500)
+        mapLabel.setBounds(500, 60, 1100, 750)
 
         action1Button.setBounds(600, 650, 170, 30)
 //        action2Button.setBounds(775, 650, 170, 100)
-        centrebutton.setBounds(30, 650, 170, 30)
+        centrebutton.setBounds(970, 530, 170, 30)
         scummbutton.setBounds(30, 690, 170, 30)
         generalbutton.setBounds(30, 730, 170, 30)
-        jailbutton.setBounds(210, 650, 170, 30)
+        jailbutton.setBounds(1243, 440, 80, 30)
         alleybutton.setBounds(210, 690, 170, 30)
         storagebutton.setBounds(210, 730, 170, 30)
         botOfClockbutton.setBounds(390, 650, 170, 30)
@@ -328,6 +342,7 @@ class MainWindow(val app: App) {
         panel.add(infoLabel)
         panel.add(notifLabel)
         panel.add(dialogLabel)
+
 
         panel.add(action1Button)
 //        panel.add(action2Button)
@@ -340,6 +355,7 @@ class MainWindow(val app: App) {
         panel.add(botOfClockbutton)
         panel.add(topOfClockbutton)
         panel.add(mayorbutton)
+        panel.add(mapLabel)
     }
 
 
@@ -402,7 +418,13 @@ class MainWindow(val app: App) {
 
         infoLabel.text = "You are at ${name}, ${description}" // was going
 
-//        notifLabel.text = "ITEM: " + app.itemInHand // Don't need this except for test
+        if (location.requiredItem == null) { // I thought it was ugly to display null as an item. Hence, I did this.
+            notifLabel.text = "You have no items"
+        } else {
+            notifLabel.text = "Item: " + app.itemInHand // Don't need this except for test
+        }
+        if (location.requiredItem == null) {
+        }
 
         if (app.itemInHand == location.requiredItem) {
             dialogLabel.text = location.questNotes[location.currentQuestNote]
@@ -413,6 +435,11 @@ class MainWindow(val app: App) {
             action1Button.isVisible = false
         }
 
+        // for an ending:
+        if (location.end && app.itemInHand == "Mushy Banana") {
+
+        }
+
         centrebutton.isEnabled = location.connectLocation.contains(app.townCentre)
         scummbutton.isEnabled = location.connectLocation.contains(app.scummBar)
         generalbutton.isEnabled = location.connectLocation.contains(app.generalStore)
@@ -420,7 +447,7 @@ class MainWindow(val app: App) {
         alleybutton.isEnabled = location.connectLocation.contains(app.alley)
         storagebutton.isEnabled = location.connectLocation.contains(app.storageYard)
         botOfClockbutton.isEnabled = location.connectLocation.contains(app.botOfClock)
-        topOfClockbutton.isEnabled = location.connectLocation.contains(app.mayorsMansion)
+        topOfClockbutton.isEnabled = location.connectLocation.contains(app.topOfClock)
         mayorbutton.isEnabled = location.connectLocation.contains(app.mayorsMansion)
     }
 
