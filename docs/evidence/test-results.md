@@ -34,6 +34,9 @@ Testing bounds of movement through connected and not connected locations
 
 Clicked Bar (connected) and Spire (not connected) from Town Centre.
 
+Note: I tested all locations to make sure they worked only when connected.
+For the sake of doing this testing on my Mac, only showed the testing of three locations.
+
 ### Test Result
 
 ![player.png](screenshots/player.png)

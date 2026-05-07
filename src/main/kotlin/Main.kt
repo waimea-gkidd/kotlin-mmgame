@@ -1,3 +1,13 @@
+/**
+ * =====================================================================
+ * Programming Project for NCEA Level 3, Standard 91906
+ * ---------------------------------------------------------------------
+ * Project Name:   Meelé island explorer
+ * Project Author: Gideon Kidd
+ * GitHub Repo:    https://github.com/waimea-gkidd/kotlin-mmgame
+ * ---------------------------------------------------------------------
+ */
+
 import com.formdev.flatlaf.themes.FlatMacDarkLaf
 
 import java.awt.Font
@@ -36,13 +46,12 @@ class Location( // What each location contains
 ) {
     var currentQuestNote: Int = 0
     val connectLocation = mutableListOf<Location>()
-    var questCompleted = false // Although it is blank, this has been used.
 
     fun reset() { // This resets the notes when the player leaves the current location. Meaning that you essentially restart a mission if you leave and come back rather than continuing off where you left.
         currentQuestNote = 0
     }
 
-    fun questCompleted(): Boolean { // This boolean returns as true if we are on the last note. When true: quest is marked as complete.
+    fun isQuestCompleted(): Boolean { // This boolean returns as true if we are on the last note. When true: quest is marked as complete.
         return currentQuestNote == questNotes.size - 1
     }
 
@@ -55,7 +64,7 @@ class Location( // What each location contains
 
 
 class App { // Runs the core od the game
-    val locations = mutableListOf<Location>()
+    private val locations = mutableListOf<Location>()
     var currentLocation: Location
 
     //    var currentQuest: Location
@@ -76,9 +85,9 @@ class App { // Runs the core od the game
         val coins = "5 coins"
         val cog = "Rusty cog"
         val paperPlane = "Paper plane"
-        val Find = "Find Stan"
-        val Key = "Useless key"
-        val Banana = "Mushy Banana"
+        val find = "Find Stan"
+        val key = "Useless key"
+        val banana = "Mushy Banana"
         val end = "The end"
 
         // Initial meeting/note from Guybrush
@@ -123,10 +132,10 @@ class App { // Runs the core od the game
                 "Infront of you sist a grumpy looking scruffy old man",
                 "Old grump: Wad ye wan?",
                 "Old grump: You the handyman for the clock tower?",
-                "<html>Old grump: Well why didn't ye say so?\n All the gear you needs already upstairs\n ${cog + "'ll"} be ${coins}<html>",
-                "SYSTEM: You got ${cog + "!"}"
+                "<html>Old grump: Well why didn't ye say so?\n All the gear you needs already upstairs\n ${"$cog'll"} be ${coins}<html>",
+                "SYSTEM: You got ${"$cog!"}"
             ),
-            listOf("Continue", "Stare blankly", "Sure...", "Buy ${cog}", "Done"),
+            listOf("Continue", "Stare blankly", "Sure...", "Buy $cog", "Done"),
             cog,
             coins
         )
@@ -147,15 +156,15 @@ class App { // Runs the core od the game
             "Base of the old tower.",
             "There is NOTHING to do here.",
             listOf(
-                "<html>As you reach the bottom of the stairs you notice a ${paperPlane} infront of you<html>",
+                "<html>As you reach the bottom of the stairs you notice a $paperPlane infront of you<html>",
                 "<html>The plane has the words ${"Read Me"} scribbled on it<html>",
                 "You unfold it and it reads...",
-                "<html>It's me again, Guybrush!\n Elaine is mildly happier... just bring Stand and I'm sure he'll convince her.<html>",
+                "<html>It's me again, Guybrush!\n Elaine is mildly happier... just bring Stan and I'm sure he'll convince her.<html>",
                 "If you haven't already met Stan... and trust me, you'd know...",
-                "He's either in the local prison, or He's inside a barrel in the middle of the sea."
+                "<html>He's either in the local prison, or He's inside a barrel in the middle of the sea.<html>"
             ),
             listOf("Pick up", "Unfold", "Continue", "Next", "Next", "Done"),
-            Find,
+            find,
             paperPlane
         )
         // Route 2 (will fix the schema here a little later on)
@@ -169,13 +178,13 @@ class App { // Runs the core od the game
                 "The Jail Guard sits drunkly on a stool",
                 "<html>After talking to the drunk you manage to convince him to wager his keys to the cell for 10 (non existent) coins)<html>",
                 "The coin lands... and... it lands heads, and you lose. Buuuut... the guard doesn't know that.",
-                "<html>Just as the drunken Guard hands over his keys, Stand opens the door to his cell...\n I-I guess it was never locked, Ha Ha... Ha.<html>",
+                "<html>Just as the drunken Guard hands over his keys, Stan opens the door to his cell...\n I-I guess it was never locked, Ha Ha... Ha.<html>",
                 "Oh well we have his keys now, lets go and see what they unlock",
                 "SYSTEM: Maybe check somewhere you haven't so far"
             ),
             listOf("Talk", "Next", "Next", "Next", "Lie to Guard", "Continue", "Continue", "Done"),
-            Key,
-            Find
+            key,
+            find
         )
         alley = Location(
             "Alley",
@@ -194,12 +203,12 @@ class App { // Runs the core od the game
                 "<html>The gate to the storage yard is locked with a padlock the same colour as your key.<html>",
                 "You try it with your key.",
                 "The storage yard is unlocked",
-                "You find a ${Banana} conveniently placed on a stool",
-                "SYSTEM: You gained a ${Banana} for Guybrush"
+                "You find a $banana conveniently placed on a stool",
+                "SYSTEM: You gained a $banana for Guybrush"
             ),
             listOf("Continue", "Unlock", "Continue", "Next", "Done"),
-            Banana,
-            Key
+            banana,
+            key
         )
         mansion = Location(
             "Mayor's Mansion",
@@ -212,7 +221,7 @@ class App { // Runs the core od the game
             ),
             listOf("Continue", "End"),
             end,
-            Banana,
+            banana,
             true,
 
             )
@@ -224,7 +233,7 @@ class App { // Runs the core od the game
         locations.add(alley)
         locations.add(yard)
         locations.add(clockTower)
-        locations.add(clockTower)
+        locations.add(clock)
         locations.add(mansion)
 
         // Connects locations together
@@ -272,12 +281,12 @@ class App { // Runs the core od the game
 
  */
 
-class MainWindow(val app: App) {
+class MainWindow(private val app: App) {
 
-    val frame = JFrame("Meelé Island explorer")
+    private val frame = JFrame("Meelé Island explorer")
 
     private val panel = JPanel().apply { layout = null }
-    val mapIcon = ImageIcon(ClassLoader.getSystemResource("Map.png"))
+    private val mapIcon = ImageIcon(ClassLoader.getSystemResource("Map.png"))
 
     private val titleLabel = JLabel("Meelé island explorer")
     private val infoLabel = JLabel()
@@ -393,13 +402,13 @@ class MainWindow(val app: App) {
     }
 
 
-    fun updateUI() {
+    private fun updateUI() {
 
         val location = app.currentLocation
         val name = location.name
         val description = location.description
 
-        infoLabel.text = "You are at ${name}, ${description}" // was going
+        infoLabel.text = "You are at $name, $description" // was going
 
         if (app.itemInHand == location.requiredItem) {
             dialogLabel.text = location.questNotes[location.currentQuestNote]
@@ -408,11 +417,6 @@ class MainWindow(val app: App) {
         } else {
             dialogLabel.text = location.noQuestNotes
             actionButton.isVisible = false
-        }
-
-        // for an ending:
-        if (location.end && app.itemInHand == "Mushy Banana") {
-
         }
 
         val locationButtons = mapOf( // Dt notes
@@ -435,14 +439,14 @@ class MainWindow(val app: App) {
 
         val location = app.currentLocation
 
-        if (location.questCompleted()) {
+        if (location.isQuestCompleted()) { // player gets item after a quest
             app.getItem()
         } else {
             location.nextNote()
         }
 
 
-        if (location.end && location.questCompleted()) { // Dt notes. if end and questComplete > Triggers ending.
+        if (location.end && location.isQuestCompleted()) { // Dt notes. if end and questComplete > Triggers ending.
             JOptionPane.showMessageDialog(
                 frame,
                 "Elaine opens the door...\nYou've saved Guybrush! and completed your quest!",
