@@ -25,7 +25,7 @@ fun main() {
 F */
 
 class Location( // What each location contains
-     val name: String,
+    val name: String,
     val description: String,
     val noQuestNotes: String,
     val questNotes: List<String> = listOf(),
@@ -41,9 +41,11 @@ class Location( // What each location contains
     fun reset() { // This resets the notes when the player leaves the current location. Meaning that you essentially restart a mission if you leave and come back rather than continuing off where you left.
         currentQuestNote = 0
     }
+
     fun questCompleted(): Boolean { // This boolean returns as true if we are on the last note. When true: quest is marked as complete.
         return currentQuestNote == questNotes.size - 1
     }
+
     fun nextNote() { // Moves to the next note in the sequence
         if (currentQuestNote < questNotes.size - 1) {
             currentQuestNote++
@@ -148,7 +150,7 @@ class App { // Runs the core od the game
                 "<html>As you reach the bottom of the stairs you notice a ${paperPlane} infront of you<html>",
                 "<html>The plane has the words ${"Read Me"} scribbled on it<html>",
                 "You unfold it and it reads...",
-                "<htlm>It's me again, Guybrush!\n Elaine is mildly happier... just bring Stand and I'm sure he'll convince her.<htlm>",
+                "<html>It's me again, Guybrush!\n Elaine is mildly happier... just bring Stand and I'm sure he'll convince her.<html>",
                 "If you haven't already met Stan... and trust me, you'd know...",
                 "He's either in the local prison, or He's inside a barrel in the middle of the sea."
             ),
@@ -162,12 +164,12 @@ class App { // Runs the core od the game
             "A small stone jail.",
             "Guard: I'm not in the mood for you right now. Come back later.",
             listOf(
-                "<htlm>Walking past the jail you hear someone call out. It just so happens to be Stan (of course it is).<htlm>",
+                "<html>Walking past the jail you hear someone call out. It just so happens to be Stan (of course it is).<html>",
                 "Stan: Hey!... Hey you there... You've gotta get me outta here.",
                 "The Jail Guard sits drunkly on a stool",
-                "<htlm>After talking to the drunk you manage to convince him to wager his keys to the cell for 10 (non existent) coins)<htlm>",
+                "<html>After talking to the drunk you manage to convince him to wager his keys to the cell for 10 (non existent) coins)<html>",
                 "The coin lands... and... it lands heads, and you lose. Buuuut... the guard doesn't know that.",
-                "<htlm>Just as the drunken Guard hands over his keys, Stand opens the door to his cell...\n I-I guess it was never locked, Ha Ha... Ha.<htlm>",
+                "<html>Just as the drunken Guard hands over his keys, Stand opens the door to his cell...\n I-I guess it was never locked, Ha Ha... Ha.<html>",
                 "Oh well we have his keys now, lets go and see what they unlock",
                 "SYSTEM: Maybe check somewhere you haven't so far"
             ),
@@ -189,7 +191,7 @@ class App { // Runs the core od the game
             "A yard full of crates.",
             "A locked storage yard.",
             listOf(
-                "<htlm>The gate to the storage yard is locked with a padlock the same colour as your key.<htlm>",
+                "<html>The gate to the storage yard is locked with a padlock the same colour as your key.<html>",
                 "You try it with your key.",
                 "The storage yard is unlocked",
                 "You find a ${Banana} conveniently placed on a stool",
@@ -213,7 +215,7 @@ class App { // Runs the core od the game
             Banana,
             true,
 
-        )
+            )
 
         locations.add(townCentre)
         locations.add(bar)
@@ -443,7 +445,7 @@ class MainWindow(val app: App) {
         if (location.end && location.questCompleted()) { // Dt notes. if end and questComplete > Triggers ending.
             JOptionPane.showMessageDialog(
                 frame,
-                "Elaine opens the door...\nYou've completed your quest!",
+                "Elaine opens the door...\nYou've saved Guybrush! and completed your quest!",
                 "This is... the END!",
                 JOptionPane.INFORMATION_MESSAGE
             )
@@ -470,7 +472,6 @@ class MainWindow(val app: App) {
     }
 
 }
-
 
 
 /**

@@ -4,13 +4,19 @@ The test results show the actual outcome of the testing, following the [Test Pla
 
 ---
 
+## This is my map:
+
+![Map.png](screenshots/testMap.png)
+
+---
+
 ## Game Setup
 
-Start game > No input needed = Instructions should show. 
+Start game > No input needed = Instructions should show.
 
 ### Test Data Used
 
-No input. Just lauched game. 
+No input. Just lauched game.
 
 ### Test Result
 
@@ -38,7 +44,7 @@ Player moved to the Bar without issue. Spire button was greyed out and could not
 
 ## Completing a Quest
 
-Completed the letter > went to bar 
+Completed the letter > went to bar
 
 ### Test Data Used
 
@@ -48,7 +54,7 @@ Completed the Town Centre letter sequence then visited the Scumm Bar.
 
 ![quest.png](screenshots/quest.png)
 
-Bar quest started dialog and gave the coins at the end of the quest. 
+Bar quest started dialog and gave the coins at the end of the quest.
 
 ---
 
@@ -70,7 +76,8 @@ noQuest dialogue displayed and no action button appeared.
 
 ## Win
 
-Example test description. Example test description.Example test description. Example test description.Example test description. Example test description.
+Example test description. Example test description.Example test description. Example test description.Example test
+description. Example test description.
 
 ### Test Data Used
 

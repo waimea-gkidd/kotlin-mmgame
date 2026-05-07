@@ -1,14 +1,12 @@
-# PROJECT NAME HERE
+# Meelé island explorer
 
-by YOUR NAME HERE
+by Gideon Kidd
 
 ## Project Description
 
-**PLACE YOUR PROJECT DESCRIPTION HERE**
-**PLACE YOUR PROJECT DESCRIPTION HERE**
-**PLACE YOUR PROJECT DESCRIPTION HERE**
-**PLACE YOUR PROJECT DESCRIPTION HERE**
-**PLACE YOUR PROJECT DESCRIPTION HERE**
+Meelé Island explorer is an explorer type story game inspired by the point and click game Monkey Island.
+The player makes their way through different locations around Meelé Island, completing quests,
+and collecting items to help Guybrush Threepwood escape the Mayor's Mansion.
 
 ---
 
@@ -28,12 +26,9 @@ The project is written in the [Kotlin](https://kotlinlang.org) programming langu
 *complex programming techniques**:
 
 - Programming a graphical user interface (GUI)
-- Reading from, or writing to, files
 - Object-oriented programming (OOP) classes and objects
 - Self-defined types
 - Using non-core API, library or framework
-- Using complex data structures (e.g. stacks, queues, trees)
 
-**EDIT LIST ABOVE TO MATCH YOUR PROJECT**
 
 
