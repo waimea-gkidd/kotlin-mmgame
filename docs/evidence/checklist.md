@@ -20,7 +20,7 @@ The game functions correctly and meets the specification:
 - [X] The game is based on a **non-trivial map**
 - [X] The player can **move between locations**
 - [X] The player has a **clear purpose** they can attempt to achieve
-- [ ] A **win / end / loss state** is possible
+- [X] A **win / end / loss state** is possible
 
 ### Program Code
 
@@ -36,7 +36,7 @@ The program structure:
 - [X] Contains **sequences** of instructions
 - [X] Uses **conditional** instructions to control the program flow
 - [X] Uses program **branches** (if...else, when, etc.)
-- [ ] Uses **iteration** (loops) to repeat things (for, while, etc.)
+- [X] Uses **iteration** (loops) to repeat things (for, while, etc.)
 
 ### Program Documentation
 
@@ -50,15 +50,14 @@ The program code:
 
 The program has been tested and there is documented evidence that:
 
-- [ ] The game is **fully functional**, showing testing of:
-    - [ ] game setup
-    - [ ] player movement
-    - [ ] other player actions
-    - [ ] scoring (if any)
-    - [ ] player win / lose states
+- [X] The game is **fully functional**, showing testing of:
+    - [X] game setup
+    - [X] player movement
+    - [X] other player actions
+    - [X] player win / lose states
     - [ ] final feedback (if appropriate)
-- [ ] **Valid (expected) data** has been used to test **all data inputs**
-- [ ] Where tests have failed, **fixes** are discussed and **tests re-run**
+- [X] **Valid (expected) data** has been used to test **all data inputs**
+- [ ] Where tests have failed, **fixes** are discussed and **tests re-run** 
 
 ---
 
